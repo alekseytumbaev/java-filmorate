@@ -1,0 +1,85 @@
+GET http://localhost:8080/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-02-16T181745.200.json
+
+###
+
+PUT http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 106
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+"id": "1",
+"email": "qwer@mail.com",
+"login": "bestLoginEver",
+"name": "NE ALEKSEY",
+"birthday": "123"
+}
+
+<> 2023-02-16T181633.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 117
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "id": "null",
+  "email": "qwer@mail.com",
+  "login": "bestLoginEver",
+  "name": "Alesksey",
+  "birthday": "123"
+}
+
+<> 2023-02-16T181517.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 117
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "id": "null",
+  "email": "qwer@mail.com",
+  "login": "bestLoginEver",
+  "name": "Alesksey",
+  "birthday": "123"
+}
+
+<> 2023-02-16T181506.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 117
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "id": "null",
+  "email": "qwer@mail.com",
+  "login": "bestLoginEver",
+  "name": "Alesksey",
+  "birthday": "123"
+}
+
+<> 2023-02-16T181248.200.json
+
+###
+
