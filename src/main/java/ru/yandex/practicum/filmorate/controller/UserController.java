@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -23,12 +25,14 @@ public class UserController {
     public ResponseEntity<User> add(@RequestBody @Valid User user) {
         user.setId(getNextId());
         users.put(user.getId(), user);
+        log.info("Добавлен пользователь с id = {}", user.getId());
         return ResponseEntity.ok(user);
     }
 
     @PutMapping
     public ResponseEntity<User> update(@RequestBody @Valid User user) {
         users.put(user.getId(), user);
+        log.info("Обновлен пользователь с id = {}", user.getId());
         return ResponseEntity.ok(user);
     }
 
