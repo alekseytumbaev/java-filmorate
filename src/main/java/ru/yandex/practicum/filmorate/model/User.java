@@ -18,7 +18,6 @@ public class User {
     @Pattern(regexp = "^\\S+$") //логин не должен содержать пробелов
     private String login;
 
-    @NotNull
     private String name;
 
     @NotNull

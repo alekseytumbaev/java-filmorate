@@ -92,19 +92,13 @@ public class UserValidationTest extends AbstractValidationTest {
 
     //////////////////////////////////////name//////////////////////////////////////////////////////////////////////////
     @Test
-    void nameNotNull() {
+    void nameCanBeNull() {
         String property = "name";
 
         user.setName(null);
-        assertTrue(
-                hasAnnotationViolation(user, property, NotNull.class, validator),
-                String.format("%s не должно равняться %s", property, user.getName())
-        );
-
-        user.setName("Aleksey Tumbaev");
         assertFalse(
                 hasAnnotationViolation(user, property, NotNull.class, validator),
-                String.format("%s = %s, не равно null, но не проходит валидацию", property, user.getName())
+                String.format("%s = %s, может быть null, но не прошло валидацию", property, user.getName())
         );
     }
 
