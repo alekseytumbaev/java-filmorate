@@ -1,3 +1,398 @@
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 115
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "2002-01-01"
+}
+
+<> 2023-02-21T182202.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 115
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "2002-01-01"
+}
+
+<> 2023-02-21T182047.500.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 115
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "2002-01-01"
+}
+
+<> 2023-02-21T181211.500.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 115
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "2002-01-01"
+}
+
+<> 2023-02-21T181119.500.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 115
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "2002-01-01"
+}
+
+<> 2023-02-21T181027.500.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 115
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "2002-01-01"
+}
+
+<> 2023-02-21T180906.500.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 115
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "2002-01-01"
+}
+
+<> 2023-02-21T172547.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 111
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "asdfda"
+}
+
+<> 2023-02-21T172458.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 111
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "email": "mail@yandex.ru",
+  "birthday": "asdfda"
+}
+
+<> 2023-02-21T172452.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 125
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "id": 9999,
+  "email": "mail@yandex.ru",
+  "birthday": "asdfda"
+}
+
+<> 2023-02-21T172429.400.json
+
+###
+
+POST http://localhost:8080/films
+Content-Type: application/json
+Content-Length: 103
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "sadfsadf",
+  "description": "sdfsadf",
+  "releaseDate": "2000-01-01",
+  "duration": 1234
+}
+
+<> 2023-02-21T162617.500.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 103
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "sadfsadf",
+  "description": "sdfsadf",
+  "releaseDate": "2000-01-01",
+  "duration": 1234
+}
+
+<> 2023-02-21T155840.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 131
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "Джуманджи",
+  "description": "крутой фильм",
+  "releaseDate": "2000-01-01",
+  "duration": "1234"
+}
+
+<> 2023-02-21T155754.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 131
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "Джуманджи",
+  "description": "крутой фильм",
+  "releaseDate": "2000-01-01",
+  "duration": "1234"
+}
+
+<> 2023-02-21T155724.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 160
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "Джуманджи",
+  "email": "mail@yandex.ru",
+  "description": "крутой фильм",
+  "releaseDate": "2000-01-01",
+  "duration": "1234"
+}
+
+<> 2023-02-21T155656.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 157
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "Джуманджи",
+  "email": "mail@yandex.ru",
+  "description": "крутой фильм",
+  "releaseDate": "sadfdsf",
+  "duration": "1234"
+}
+
+<> 2023-02-21T155643.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 157
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "Джуманджи",
+  "email": "mail@yandex.ru",
+  "description": "крутой фильм",
+  "releaseDate": "sadfdsf",
+  "duration": "1234"
+}
+
+<> 2023-02-21T155520.400.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 125
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "id": 9999,
+  "email": "mail@yandex.ru",
+  "birthday": "asdfda"
+}
+
+<> 2023-02-21T155131.400.json
+
+###
+
+PUT http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 125
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "id": 9999,
+  "email": "mail@yandex.ru",
+  "birthday": "asdfda"
+}
+
+<> 2023-02-21T155109.400.json
+
+###
+
+PUT http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 129
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "login": "doloreUpdate",
+  "name": "est adipisicing",
+  "id": 9999,
+  "email": "mail@yandex.ru",
+  "birthday": "1976-09-20"
+}
+
+<> 2023-02-19T151933.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 104
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "whateve@mail.ru",
+  "login": "aleksey_tumbaev",
+  "name": "",
+  "birthday": "2002-07-31"
+}
+
+<> 2023-02-19T150023.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-02-19T145804.400.json
+
+###
+
 GET http://localhost:8080/users
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)

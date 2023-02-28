@@ -1,15 +1,14 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -19,15 +18,21 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class UserController {
     private long nextId;
     private final Map<Long, User> users;
+    private final MessageSource messageSource;
 
-    public UserController() {
+    public UserController(MessageSource messageSource) {
+        this.messageSource = messageSource;
         this.users = new HashMap<>();
     }
 
     @PostMapping
     public ResponseEntity<User> add(@RequestBody @Valid User user) {
         save(user);
-        log.info("Добавлен пользователь с id = {}", user.getId());
+        log.info(messageSource.getMessage(
+                "user_create",
+                new Long[] {user.getId()},
+                Locale.getDefault())
+        );
         return ResponseEntity.ok(user);
     }
 
@@ -38,7 +43,11 @@ public class UserController {
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(user, NOT_FOUND);
         }
-        log.info("Обновлен пользователь с id = {}", user.getId());
+        log.info(messageSource.getMessage(
+                "user_update",
+                new Long[] {user.getId()},
+                Locale.getDefault()));
+
         return ResponseEntity.ok(user);
     }
 
@@ -55,7 +64,12 @@ public class UserController {
 
     private void renew(User user) {
         if (!users.containsKey(user.getId()))
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(
+                    messageSource.getMessage(
+                            "UserNotFoundException.message",
+                            new Long[]{user.getId()},
+                            Locale.getDefault())
+            );
         setLoginForEmptyName(user);
         users.put(user.getId(), user);
     }
@@ -67,7 +81,6 @@ public class UserController {
     }
 
     private long getNextId() {
-        nextId++;
-        return nextId;
+        return ++nextId;
     }
 }

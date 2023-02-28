@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
@@ -9,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -19,15 +21,22 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class FilmController {
     private long nextId;
     private final Map<Long, Film> films;
+    private final MessageSource messageSource;
 
-    public FilmController() {
+
+    public FilmController(MessageSource messageSource) {
+        this.messageSource = messageSource;
         this.films = new HashMap<>();
     }
 
     @PostMapping
     public ResponseEntity<Film> add(@RequestBody @Valid Film film) {
         save(film);
-        log.info("Добавлен фильм с id = {}", film.getId());
+        log.info(messageSource.getMessage(
+                "film_create",
+                new Long[] {film.getId()},
+                Locale.getDefault())
+        );
         return ResponseEntity.ok(film);
     }
 
@@ -38,7 +47,11 @@ public class FilmController {
         } catch (FilmNotFoundException e) {
             return new ResponseEntity<>(film, NOT_FOUND);
         }
-        log.info("Обновлен фильм с id = {}", film.getId());
+        log.info(messageSource.getMessage(
+                "film_update",
+                new Long[] {film.getId()},
+                Locale.getDefault())
+        );
         return ResponseEntity.ok(film);
     }
 
@@ -54,12 +67,15 @@ public class FilmController {
 
     private void renew(Film film) {
         if (!films.containsKey(film.getId()))
-            throw new FilmNotFoundException();
+            throw new FilmNotFoundException(messageSource.getMessage(
+                    "FilmNotFoundException.message",
+                    new Long[]{film.getId()},
+                    Locale.getDefault())
+            );
         films.put(film.getId(), film);
     }
 
     private long getNextId() {
-        nextId++;
-        return nextId;
+        return ++nextId;
     }
 }
