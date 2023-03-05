@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
@@ -28,37 +27,37 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public void like(@PathVariable @Positive long id, @PathVariable @Positive long userId) {
+    public void like(@PathVariable long id, @PathVariable long userId) {
         filmService.like(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void removeLike(@PathVariable @Positive long id, @PathVariable @Positive long userId) {
+    public void removeLike(@PathVariable long id, @PathVariable long userId) {
         filmService.removeLike(id, userId);
     }
     @PostMapping
-    public ResponseEntity<Film> add(@RequestBody @Valid Film film) {
+    public Film add(@RequestBody @Valid Film film) {
         Film addedFilm = filmService.add(film);
         log.info(messageSource.getMessage(
                 "film_create",
                 new Long[] {addedFilm.getId()},
                 Locale.getDefault())
         );
-        return ResponseEntity.ok(addedFilm);
+        return addedFilm;
     }
 
     @PutMapping
-    public ResponseEntity<Film> update(@RequestBody @Valid Film film) {
+    public Film update(@RequestBody @Valid Film film) {
         Film updatedFilm = filmService.update(film);
         log.info(messageSource.getMessage(
                 "film_update",
                 new Long[] {updatedFilm.getId()},
                 Locale.getDefault()));
-        return ResponseEntity.ok(updatedFilm);
+        return updatedFilm;
     }
 
     @GetMapping("/{id}")
-    public Film getById(@PathVariable @Positive long id) {
+    public Film getById(@PathVariable long id) {
         return filmService.getByIdIfExists(id);
     }
 

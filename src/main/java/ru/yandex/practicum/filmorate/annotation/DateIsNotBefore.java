@@ -37,7 +37,8 @@ public @interface DateIsNotBefore {
             try {
                 date = LocalDate.parse(constraintAnnotation.value());
             } catch (DateTimeParseException e) {
-                throw new IllegalArgumentException(e.getParsedString() + " не совпадает с форматом даты yyyy-MM-dd");
+                throw new IllegalArgumentException(
+                        String.format("\"%s\" doesn't match date format yyyy-MM-dd", e.getParsedString()));
             }
         }
 

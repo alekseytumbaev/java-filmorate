@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -22,49 +21,49 @@ public class UserController {
     private final MessageSource messageSource;
 
     @PutMapping("/{id}/friends/{friendId}")
-    public void addFriend(@PathVariable @Positive long id, @PathVariable @Positive long friendId) {
+    public void addFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.addFriend(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
-    public Collection<User> getFriends(@PathVariable @Positive long id) {
+    public Collection<User> getFriends(@PathVariable long id) {
         return userService.getFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Collection<User> getMutualFriends(@PathVariable @Positive long id, @PathVariable @Positive long otherId) {
+    public Collection<User> getMutualFriends(@PathVariable long id, @PathVariable long otherId) {
         return userService.getMutualFriends(id, otherId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public void removeFriend(@PathVariable @Positive long id, @PathVariable @Positive long friendId) {
+    public void removeFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.removeFriend(id, friendId);
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable @Positive long id) {
+    public User getById(@PathVariable long id) {
         return userService.getByIdIfExists(id);
     }
 
     @PostMapping
-    public ResponseEntity<User> add(@RequestBody @Valid User user) {
+    public User add(@RequestBody @Valid User user) {
         User addedUser = userService.add(user);
         log.info(messageSource.getMessage(
                 "user_create",
                 new Long[]{addedUser.getId()},
                 Locale.getDefault())
         );
-        return ResponseEntity.ok(addedUser);
+        return addedUser;
     }
 
     @PutMapping
-    public ResponseEntity<User> update(@RequestBody @Valid User user) {
+    public User update(@RequestBody @Valid User user) {
         User updatedUser = userService.update(user);
         log.info(messageSource.getMessage(
                 "user_update",
                 new Long[]{updatedUser.getId()},
                 Locale.getDefault()));
-        return ResponseEntity.ok(updatedUser);
+        return updatedUser;
     }
 
     @GetMapping
