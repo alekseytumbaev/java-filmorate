@@ -9,9 +9,11 @@ public class InMemoryUserStorage extends AbstractInMemoryStorage<User> implement
 
     @Override
     public User update(User entity) {
-        if (!existsById(entity.getId()))
-            throw new UserNotFoundException(String.format("User with id=%d not found", entity.getId()));
-        entities.put(entity.getId(), entity);
+        long id = entity.getId();
+        if (!existsById(id))
+            throw new UserNotFoundException(
+                    String.format("User with id=%d not found", id), id);
+        entities.put(id, entity);
         return entity;
     }
 }

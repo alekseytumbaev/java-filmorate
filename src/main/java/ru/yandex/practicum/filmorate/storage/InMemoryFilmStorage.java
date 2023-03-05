@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 public class InMemoryFilmStorage extends AbstractInMemoryStorage<Film> implements FilmStorage {
     @Override
     public Film update(Film entity) {
-        if (!existsById(entity.getId()))
-            throw new FilmNotFoundException(String.format("Film with id=%d not found", entity.getId()));
-        entities.put(entity.getId(), entity);
+        long id = entity.getId();
+        if (!existsById(id))
+            throw new FilmNotFoundException(
+                    String.format("Film with id=%d not found", id), id);
+        entities.put(id, entity);
         return entity;
     }
 

@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate.exception;
 
 public class FilmNotFoundException extends RuntimeException {
+    private final long filmId;
 
-    public FilmNotFoundException() {
+    public FilmNotFoundException(String message, long filmId) {
+        super(message);
+        this.filmId = filmId;
     }
 
-    public FilmNotFoundException(String message) {
-        super(message);
+    public long getFilmId() {
+        return filmId;
     }
 }

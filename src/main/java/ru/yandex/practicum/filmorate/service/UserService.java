@@ -83,7 +83,8 @@ public class UserService {
     public User getByIdIfExists(long id) {
         Optional<User> userOpt = userStorage.getById(id);
         if (userOpt.isEmpty())
-            throw new UserNotFoundException(String.format("User with id=%d not found", id));
+            throw new UserNotFoundException(
+                    String.format("User with id=%d not found", id), id);
 
         return userOpt.get();
     }
