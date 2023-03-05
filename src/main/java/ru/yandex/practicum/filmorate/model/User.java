@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 public class User {
@@ -23,4 +25,7 @@ public class User {
     @NotNull
     @PastOrPresent
     private LocalDate birthday;
+
+    @NotNull
+    private Set<Long> friendIds = new LinkedHashSet<>();
 }
