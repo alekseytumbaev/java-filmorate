@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -8,9 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
-public class User {
-
-    private long id;
+@EqualsAndHashCode(callSuper = true)
+public class User extends Entity {
 
     @NotBlank
     @Email

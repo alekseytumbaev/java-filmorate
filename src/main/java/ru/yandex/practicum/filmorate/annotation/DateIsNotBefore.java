@@ -10,6 +10,7 @@ import java.time.format.DateTimeParseException;
 
 /**
  * Проверяет, что дата не раньше указанной. Формат даты - yyyy-MM-dd.
+ * <p>
  * null-элементы считаются валидными.
  * <p>
  * Кидает {@link IllegalArgumentException}, если строка, переданная аннотации, в неправильном формате.

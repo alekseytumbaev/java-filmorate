@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
@@ -16,6 +17,12 @@ public class ErrorHandler {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse onUserNotFoundException(final UserNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(FilmNotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public ErrorResponse onFilmNotFoundException(final FilmNotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 
