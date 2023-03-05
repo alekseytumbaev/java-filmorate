@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -10,7 +9,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -19,7 +17,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FilmController {
     private final FilmService filmService;
-    private final MessageSource messageSource;
 
     @GetMapping("/popular")
     public Collection<Film> getTopMostPopular(@RequestParam Optional<Integer> count) {
@@ -29,19 +26,24 @@ public class FilmController {
     @PutMapping("/{id}/like/{userId}")
     public void like(@PathVariable long id, @PathVariable long userId) {
         filmService.like(id, userId);
+        log.info(
+                String.format("User with id=%d liked film with id=%d", userId, id)
+        );
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public void removeLike(@PathVariable long id, @PathVariable long userId) {
         filmService.removeLike(id, userId);
+        log.info(
+                String.format("User with id=%d removed like from film with id=%d", userId, id)
+        );
     }
+
     @PostMapping
     public Film add(@RequestBody @Valid Film film) {
         Film addedFilm = filmService.add(film);
-        log.info(messageSource.getMessage(
-                "film_create",
-                new Long[] {addedFilm.getId()},
-                Locale.getDefault())
+        log.info(
+                String.format("Film with id=%d was added", addedFilm.getId())
         );
         return addedFilm;
     }
@@ -49,10 +51,9 @@ public class FilmController {
     @PutMapping
     public Film update(@RequestBody @Valid Film film) {
         Film updatedFilm = filmService.update(film);
-        log.info(messageSource.getMessage(
-                "film_update",
-                new Long[] {updatedFilm.getId()},
-                Locale.getDefault()));
+        log.info(
+                String.format("Film with id=%d was updated", updatedFilm.getId())
+        );
         return updatedFilm;
     }
 

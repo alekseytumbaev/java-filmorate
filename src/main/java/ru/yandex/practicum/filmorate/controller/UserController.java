@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
@@ -10,7 +9,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -18,11 +16,13 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final MessageSource messageSource;
 
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.addFriend(id, friendId);
+        log.info(
+                String.format("User with id=%d and user with id=%d became friends", id, friendId)
+        );
     }
 
     @GetMapping("/{id}/friends")
@@ -38,6 +38,9 @@ public class UserController {
     @DeleteMapping("/{id}/friends/{friendId}")
     public void removeFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.removeFriend(id, friendId);
+        log.info(
+                String.format("User with id=%d and user with id=%d stopped being friends", id, friendId)
+        );
     }
 
     @GetMapping("/{id}")
@@ -48,10 +51,8 @@ public class UserController {
     @PostMapping
     public User add(@RequestBody @Valid User user) {
         User addedUser = userService.add(user);
-        log.info(messageSource.getMessage(
-                "user_create",
-                new Long[]{addedUser.getId()},
-                Locale.getDefault())
+        log.info(
+                String.format("User with id=%d was added", addedUser.getId())
         );
         return addedUser;
     }
@@ -59,10 +60,9 @@ public class UserController {
     @PutMapping
     public User update(@RequestBody @Valid User user) {
         User updatedUser = userService.update(user);
-        log.info(messageSource.getMessage(
-                "user_update",
-                new Long[]{updatedUser.getId()},
-                Locale.getDefault()));
+        log.info(
+                String.format("User with id=%d was updated", updatedUser.getId())
+        );
         return updatedUser;
     }
 
