@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.validation.FieldError;
@@ -13,12 +14,14 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.error.ErrorResponse;
 import ru.yandex.practicum.filmorate.model.error.ValidationViolation;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ErrorHandler {
@@ -27,33 +30,32 @@ public class ErrorHandler {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse onUserNotFoundException(final UserNotFoundException e) {
-        //TODO логирование
         String message = getErrorMessage(
                 "ErrorResponse.message.userNotFound",
                 new Object[]{e.getUserId()},
                 e,
                 String.format("User with id=%d not found", e.getUserId())
         );
+        log.warn(message, e);
         return new ErrorResponse(message);
     }
 
     @ExceptionHandler(FilmNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse onFilmNotFoundException(final FilmNotFoundException e) {
-        //TODO логирование
         String message = getErrorMessage(
                 "ErrorResponse.message.filmNotFound",
                 new Object[]{e.getFilmId()},
                 e,
                 String.format("Film with id=%d not found", e.getFilmId())
         );
+        log.warn(message, e);
         return new ErrorResponse(message);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse onMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        //TODO логирование
         String message = getErrorMessage(
                 "ErrorResponse.message.validation",
                 null,
@@ -66,7 +68,9 @@ public class ErrorHandler {
                     fieldError.getField(), fieldError.getDefaultMessage());
             violations.add(violation);
         }
-        return new ErrorResponse(message, violations);
+        ErrorResponse error = new ErrorResponse(message, violations);
+        log.warn(message + ": " + error, e);
+        return error;
     }
 
     /**
@@ -87,12 +91,14 @@ public class ErrorHandler {
         try {
             message = messageSource.getMessage(errorCode, args, Locale.getDefault());
         } catch (NoSuchMessageException ex) {
-            //TODO добавить логирование о том, что не нашлось сообщения
+            log.warn(
+                    String.format("Message for error code = \"%s\" and args = \"%s\" wasn't found",
+                            errorCode, Arrays.toString(args)));
             message = e.getMessage();
         }
 
         if (message == null) {
-            //TODO логирование о том, что сообщение из исключения отсутствовало
+            log.warn("Exception didn't have a message", e);
             message = defaultMessage;
         }
 
@@ -102,7 +108,7 @@ public class ErrorHandler {
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse onThrowable(final Throwable e) {
-        //TODO логирование
+        log.error("Unexpected error occurred", e);
         return new ErrorResponse("Internal server error");
     }
 }
