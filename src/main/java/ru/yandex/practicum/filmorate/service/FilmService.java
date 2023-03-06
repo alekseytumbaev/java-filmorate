@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -11,11 +11,16 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class FilmService {
     private static final int DEFAULT_MOST_POPULAR_FILMS_AMOUNT = 10;
     private final FilmStorage filmStorage;
     private final UserService userService;
+
+    @Autowired
+    public FilmService(FilmStorage filmStorage, UserService userService) {
+        this.filmStorage = filmStorage;
+        this.userService = userService;
+    }
 
     public Collection<Film> getTopMostPopular(int amount) {
         amount = amount < 1 ? DEFAULT_MOST_POPULAR_FILMS_AMOUNT : amount;

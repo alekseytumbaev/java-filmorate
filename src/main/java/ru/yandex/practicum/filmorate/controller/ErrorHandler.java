@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.validation.FieldError;
@@ -23,9 +23,13 @@ import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestControllerAdvice
-@RequiredArgsConstructor
 public class ErrorHandler {
     private final MessageSource messageSource;
+
+    @Autowired
+    public ErrorHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
@@ -69,7 +73,7 @@ public class ErrorHandler {
             violations.add(violation);
         }
         ErrorResponse error = new ErrorResponse(message, violations);
-        log.warn(message + ": " + error, e);
+        log.warn("{}: {}", message, error, e);
         return error;
     }
 
@@ -81,7 +85,7 @@ public class ErrorHandler {
      * Если сообщение из Throwable равно null, возвращает defaultMessage.
      *
      * @param errorCode
-     * @param args может быть null, если аргументов нет
+     * @param args           может быть null, если аргументов нет
      * @param e
      * @param defaultMessage
      * @return Сообщение связанное с errorCode, либо сообщение из Throwable, либо defaultMessage.
@@ -91,9 +95,7 @@ public class ErrorHandler {
         try {
             message = messageSource.getMessage(errorCode, args, Locale.getDefault());
         } catch (NoSuchMessageException ex) {
-            log.warn(
-                    String.format("Message for error code = \"%s\" and args = \"%s\" wasn't found",
-                            errorCode, Arrays.toString(args)));
+            log.warn("Message for error code = \"{}\" and args = \"{}\" wasn't found", errorCode, Arrays.toString(args));
             message = e.getMessage();
         }
 

@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
@@ -13,16 +12,18 @@ import java.util.Collection;
 @Slf4j
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.addFriend(id, friendId);
-        log.info(
-                String.format("User with id=%d and user with id=%d became friends", id, friendId)
-        );
+        log.info("User with id={} and user with id={} became friends", id, friendId);
     }
 
     @GetMapping("/{id}/friends")
@@ -38,9 +39,7 @@ public class UserController {
     @DeleteMapping("/{id}/friends/{friendId}")
     public void removeFriend(@PathVariable long id, @PathVariable long friendId) {
         userService.removeFriend(id, friendId);
-        log.info(
-                String.format("User with id=%d and user with id=%d stopped being friends", id, friendId)
-        );
+        log.info("User with id={} and user with id={} stopped being friends", id, friendId);
     }
 
     @GetMapping("/{id}")
@@ -51,23 +50,19 @@ public class UserController {
     @PostMapping
     public User add(@RequestBody @Valid User user) {
         User addedUser = userService.add(user);
-        log.info(
-                String.format("User with id=%d was added", addedUser.getId())
-        );
+        log.info("User with id={} was added", addedUser.getId());
         return addedUser;
     }
 
     @PutMapping
     public User update(@RequestBody @Valid User user) {
         User updatedUser = userService.update(user);
-        log.info(
-                String.format("User with id=%d was updated", updatedUser.getId())
-        );
+        log.info("User with id={} was updated", updatedUser.getId());
         return updatedUser;
     }
 
     @GetMapping
-    public ResponseEntity<Collection<User>> getAll() {
-        return ResponseEntity.ok(userService.getAll());
+    public Collection<User> getAll() {
+        return userService.getAll();
     }
 }
