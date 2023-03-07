@@ -1,15 +1,20 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.annotation.DateIsNotBefore;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-public class Film {
-
-    private long id;
+@EqualsAndHashCode(callSuper = true)
+public class Film extends Entity {
 
     @NotBlank
     private String name;
@@ -24,4 +29,10 @@ public class Film {
 
     @Positive
     private int duration; // в секундах
+
+    /**
+     * Id пользователей, которые поставили лайк фильму
+     */
+    @NotNull
+    private Set<Long> likes = new HashSet<>();
 }

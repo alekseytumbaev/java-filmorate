@@ -10,6 +10,7 @@ import java.time.format.DateTimeParseException;
 
 /**
  * Проверяет, что дата не раньше указанной. Формат даты - yyyy-MM-dd.
+ * <p>
  * null-элементы считаются валидными.
  * <p>
  * Кидает {@link IllegalArgumentException}, если строка, переданная аннотации, в неправильном формате.
@@ -36,7 +37,8 @@ public @interface DateIsNotBefore {
             try {
                 date = LocalDate.parse(constraintAnnotation.value());
             } catch (DateTimeParseException e) {
-                throw new IllegalArgumentException(e.getParsedString() + " не совпадает с форматом даты yyyy-MM-dd");
+                throw new IllegalArgumentException(
+                        String.format("\"%s\" doesn't match date format yyyy-MM-dd", e.getParsedString()));
             }
         }
 

@@ -1,73 +1,68 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private long nextId;
-    private final Map<Long, User> users;
+    private final UserService userService;
 
-    public UserController() {
-        this.users = new HashMap<>();
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable long id, @PathVariable long friendId) {
+        userService.addFriend(id, friendId);
+        log.info("User with id={} and user with id={} became friends", id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public Collection<User> getFriends(@PathVariable long id) {
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Collection<User> getMutualFriends(@PathVariable long id, @PathVariable long otherId) {
+        return userService.getMutualFriends(id, otherId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void removeFriend(@PathVariable long id, @PathVariable long friendId) {
+        userService.removeFriend(id, friendId);
+        log.info("User with id={} and user with id={} stopped being friends", id, friendId);
+    }
+
+    @GetMapping("/{id}")
+    public User getById(@PathVariable long id) {
+        return userService.getByIdIfExists(id);
     }
 
     @PostMapping
-    public ResponseEntity<User> add(@RequestBody @Valid User user) {
-        save(user);
-        log.info("Добавлен пользователь с id = {}", user.getId());
-        return ResponseEntity.ok(user);
+    public User add(@RequestBody @Valid User user) {
+        User addedUser = userService.add(user);
+        log.info("User with id={} was added", addedUser.getId());
+        return addedUser;
     }
 
     @PutMapping
-    public ResponseEntity<User> update(@RequestBody @Valid User user) {
-        try {
-            renew(user);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(user, NOT_FOUND);
-        }
-        log.info("Обновлен пользователь с id = {}", user.getId());
-        return ResponseEntity.ok(user);
+    public User update(@RequestBody @Valid User user) {
+        User updatedUser = userService.update(user);
+        log.info("User with id={} was updated", updatedUser.getId());
+        return updatedUser;
     }
 
     @GetMapping
-    public ResponseEntity<Collection<User>> getAll() {
-        return ResponseEntity.ok(users.values());
-    }
-
-    private void save(User user) {
-        user.setId(getNextId());
-        setLoginForEmptyName(user);
-        users.put(user.getId(), user);
-    }
-
-    private void renew(User user) {
-        if (!users.containsKey(user.getId()))
-            throw new UserNotFoundException();
-        setLoginForEmptyName(user);
-        users.put(user.getId(), user);
-    }
-
-    private void setLoginForEmptyName(User user) {
-        String name = user.getName();
-        if (name == null || name.isBlank())
-            user.setName(user.getLogin());
-    }
-
-    private long getNextId() {
-        nextId++;
-        return nextId;
+    public Collection<User> getAll() {
+        return userService.getAll();
     }
 }

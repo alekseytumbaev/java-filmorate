@@ -1,65 +1,64 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private long nextId;
-    private final Map<Long, Film> films;
+    private final FilmService filmService;
 
-    public FilmController() {
-        this.films = new HashMap<>();
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
+
+    @GetMapping("/popular")
+    public Collection<Film> getTopMostPopular(@RequestParam Optional<Integer> count) {
+        return filmService.getTopMostPopular(count.orElse(-1));
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public void like(@PathVariable long id, @PathVariable long userId) {
+        filmService.like(id, userId);
+        log.info("User with id={} liked film with id={}", userId, id);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public void removeLike(@PathVariable long id, @PathVariable long userId) {
+        filmService.removeLike(id, userId);
+        log.info("User with id={} removed like from film with id={}", userId, id);
     }
 
     @PostMapping
-    public ResponseEntity<Film> add(@RequestBody @Valid Film film) {
-        save(film);
-        log.info("Добавлен фильм с id = {}", film.getId());
-        return ResponseEntity.ok(film);
+    public Film add(@RequestBody @Valid Film film) {
+        Film addedFilm = filmService.add(film);
+        log.info("Film with id={} was added", addedFilm.getId());
+        return addedFilm;
     }
 
     @PutMapping
-    public ResponseEntity<Film> update(@RequestBody @Valid Film film) {
-        try {
-            renew(film);
-        } catch (FilmNotFoundException e) {
-            return new ResponseEntity<>(film, NOT_FOUND);
-        }
-        log.info("Обновлен фильм с id = {}", film.getId());
-        return ResponseEntity.ok(film);
+    public Film update(@RequestBody @Valid Film film) {
+        Film updatedFilm = filmService.update(film);
+        log.info("Film with id={} was updated", updatedFilm.getId());
+        return updatedFilm;
+    }
+
+    @GetMapping("/{id}")
+    public Film getById(@PathVariable long id) {
+        return filmService.getByIdIfExists(id);
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Film>> getAll() {
-        return ResponseEntity.ok(films.values());
-    }
-
-    private void save(Film film) {
-        film.setId(getNextId());
-        films.put(film.getId(), film);
-    }
-
-    private void renew(Film film) {
-        if (!films.containsKey(film.getId()))
-            throw new FilmNotFoundException();
-        films.put(film.getId(), film);
-    }
-
-    private long getNextId() {
-        nextId++;
-        return nextId;
+    public Collection<Film> getAll() {
+        return filmService.getAll();
     }
 }
