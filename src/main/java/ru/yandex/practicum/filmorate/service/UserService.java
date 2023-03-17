@@ -20,6 +20,7 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
+    //TODO поменять логику в соответствии с функцией запроса/подтверждения на добавление в друзья
     public void addFriend(long userId, long newFriendId) {
         if (userId == newFriendId) return;
 

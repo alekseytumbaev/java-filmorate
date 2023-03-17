@@ -16,8 +16,11 @@ public class User extends Entity {
     @Email
     private String email;
 
+    /**
+     * Логин не должен содержать пробелов
+     */
     @NotBlank
-    @Pattern(regexp = "^\\S+$") //логин не должен содержать пробелов
+    @Pattern(regexp = "^\\S+$")
     private String login;
 
     private String name;
@@ -28,4 +31,16 @@ public class User extends Entity {
 
     @NotNull
     private Set<Long> friendIds = new LinkedHashSet<>();
+
+    /**
+     * Id пользователей, которые отправили данному пользователю заявки в друзья
+     */
+    @NotNull
+    private Set<Long> receivedFriendRequestIds = new LinkedHashSet<>();
+
+    /**
+     * Id пользователей, которым данный пользователь отправил заявки в друзья
+     */
+    @NotNull
+    private Set<Long> sentFriendRequestIds = new LinkedHashSet<>();
 }

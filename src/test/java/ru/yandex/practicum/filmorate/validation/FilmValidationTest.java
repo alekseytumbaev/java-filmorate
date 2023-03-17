@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.annotation.DateIsNotBefore;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.film.Film;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
