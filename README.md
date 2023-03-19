@@ -15,7 +15,7 @@
     - Когда 2 принимает предложение статусы меняются на `confirmed`
       1) `1,2,confirmed`
       2) `2,1,confirmed`
-![filmorate_db](https://user-images.githubusercontent.com/106385986/226096004-f3acab75-e846-4938-bf89-d451e06b2f6f.png)
+![filmorate_db](https://user-images.githubusercontent.com/106385986/226184316-75cc8e9c-ee05-4467-a99f-d079c7331b8c.png)
 ### Запросы
 #### Получить фильм по id
     SELECT *
@@ -36,7 +36,7 @@
 ### Получить фильмы, которые пользователь лайкнул
     SELECT *
     FROM films
-    WHERE film_id IN (SELECT DISTINCT film_id
+    WHERE film_id IN (SELECT film_id
                       FROM likes
                       WHERE user_id = &id)
 ### Получить друзей пользователя
