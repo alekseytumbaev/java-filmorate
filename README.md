@@ -15,7 +15,8 @@
     - Когда 2 принимает предложение статусы меняются на `confirmed`
       1) `1,2,confirmed`
       2) `2,1,confirmed`
-![filmorate_db](https://user-images.githubusercontent.com/106385986/226184316-75cc8e9c-ee05-4467-a99f-d079c7331b8c.png)
+      ![](https://user-images.githubusercontent.com/106385986/227537441-62690a0c-3b0c-417f-b481-1e6b4e09326d.png)
+
 ### Запросы
 #### Получить фильм по id
     SELECT *
