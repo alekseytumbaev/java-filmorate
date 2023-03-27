@@ -23,7 +23,7 @@ public class Film extends Entity {
     /**
      * Motion Picture Association Id
      */
-    @NotBlank
+    @NotNull
     private Long mpaId;
 
     @NotNull
