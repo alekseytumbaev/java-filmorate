@@ -30,7 +30,7 @@ public class FilmService {
 
     public void like(long filmId, long userId) {
         Film film = getByIdIfExists(filmId);
-        User user = userService.getByIdIfExists(userId);
+        User user = userService.getById(userId);
 
         film.getLikes().add(user.getId());
         update(film);
@@ -38,7 +38,7 @@ public class FilmService {
 
     public void removeLike(long filmId, long userId) {
         Film film = getByIdIfExists(filmId);
-        User user = userService.getByIdIfExists(userId);
+        User user = userService.getById(userId);
 
         film.getLikes().remove(user.getId());
         update(film);

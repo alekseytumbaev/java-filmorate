@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.user.Friendship;
 import ru.yandex.practicum.filmorate.model.user.User;
@@ -15,20 +16,16 @@ public class FriendshipService {
 
     private final FriendshipStorage friendshipStorage;
 
+    @Autowired
     public FriendshipService(FriendshipStorage friendshipStorage) {
         this.friendshipStorage = friendshipStorage;
     }
 
-    public void removeFriend(User user, User friend) {
-        long userId = user.getId();
-        long friendId = friend.getId();
-
+    public void removeFriend(long userId, long friendId) {
         friendshipStorage.deleteFriendshipByUserIds(userId, friendId);
     }
 
-    public void addFriend(User user, User friend) {
-        long userId = user.getId();
-        long friendId = friend.getId();
+    public void addFriend(long userId, long friendId) {
         if (friendshipExists(userId, friendId)) return;
 
         // В тестах, несмотря на тз, предполагается, что подтверждать дружбу не надо
@@ -39,8 +36,16 @@ public class FriendshipService {
         friendshipStorage.add(secondUserFriendship);
     }
 
-    public Collection<Long> getFriendIds(long userId) {
-        return friendshipStorage.findFriendIdsByUserIdAndFriendshipStatus(userId, CONFIRMED);
+    public Collection<User> getFriends(long userId) {
+        return friendshipStorage.findFriendsByUserIdAndFriendshipStatus(userId, CONFIRMED);
+    }
+
+    /**
+     * Если firstUserId = secondUserId - возвращается просто список друзей этого пользователя
+     */
+    public Collection<User> getMutualFriends(long firstUserId, long secondUserid) {
+        if (firstUserId == secondUserid) return getFriends(firstUserId);
+        return friendshipStorage.findMutualFriends(firstUserId, secondUserid);
     }
 
     private boolean friendshipExists(long userId, long friendId) {
