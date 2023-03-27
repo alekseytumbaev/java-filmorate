@@ -4,25 +4,26 @@ import lombok.*;
 import ru.yandex.practicum.filmorate.model.Entity;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Friendship extends Entity {
 
-    @NotNull
-    private List<Long> userId;
-
-    @NotNull
-    private List<Long> friendId;
+    private long userId;
+    private long friendId;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @NotNull
     private FriendshipStatus friendshipStatus;
 
+    public Friendship(long userId, long friendId, EFriendshipStatus status) {
+        setUserId(userId);
+        setFriendId(friendId);
+        friendshipStatus = new FriendshipStatus(status);
+    }
+
     public EFriendshipStatus getStatus() {
         return friendshipStatus.getStatus();
     }
-
 }

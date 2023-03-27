@@ -7,62 +7,52 @@ import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserService {
     private final UserStorage userStorage;
+    private final FriendshipService friendshipService;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(UserStorage userStorage, FriendshipService friendshipService) {
         this.userStorage = userStorage;
+        this.friendshipService = friendshipService;
     }
 
-    //TODO поменять логику в соответствии с функцией запроса/подтверждения на добавление в друзья
     public void addFriend(long userId, long newFriendId) {
         if (userId == newFriendId) return;
 
         User user = getByIdIfExists(userId);
         User friend = getByIdIfExists(newFriendId);
 
-        user.getFriendIds().add(friend.getId());
-        friend.getFriendIds().add(user.getId());
-
-        update(user);
-        update(friend);
+        friendshipService.addFriend(user, friend);
     }
 
-    public void removeFriend(long userId, long friendIdToRemove) {
-        if (userId == friendIdToRemove) return;
+    public void removeFriend(long userId, long friendToRemoveId) {
+        if (userId == friendToRemoveId) return;
 
         User user = getByIdIfExists(userId);
-        User friend = getByIdIfExists(friendIdToRemove);
+        User friend = getByIdIfExists(friendToRemoveId);
 
-        user.getFriendIds().remove(friendIdToRemove);
-        friend.getFriendIds().remove(userId);
-
-        update(user);
-        update(friend);
+        friendshipService.removeFriend(user, friend);
     }
 
     public Collection<User> getFriends(long userId) {
-        User user = getByIdIfExists(userId);
-        return userStorage.getAllById(user.getFriendIds());
+        Collection<Long> friendIds = friendshipService.getFriendIds(userId);
+        return userStorage.getAllById(friendIds);
     }
 
     /**
      * Если firstUserId = secondUserId - возвращается просто список друзей этого пользователя
      */
     public Collection<User> getMutualFriends(long firstUserId, long secondUserId) {
-        User firstUser = getByIdIfExists(firstUserId);
-        User secondUser = getByIdIfExists(secondUserId);
+        Collection<Long> firstUserFriendIds = friendshipService.getFriendIds(firstUserId);
+        Collection<Long> secondUserFriendIds = friendshipService.getFriendIds(secondUserId);
 
-        Set<Long> mutualFriendIds = new HashSet<>(firstUser.getFriendIds());
-        mutualFriendIds.retainAll(secondUser.getFriendIds());
+        firstUserFriendIds.retainAll(secondUserFriendIds);
 
-        return userStorage.getAllById(mutualFriendIds);
+        return userStorage.getAllById(firstUserFriendIds);
     }
 
     public User add(User user) {

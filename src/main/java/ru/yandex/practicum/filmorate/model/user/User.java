@@ -6,8 +6,6 @@ import ru.yandex.practicum.filmorate.model.Entity;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -29,7 +27,4 @@ public class User extends Entity {
     @NotNull
     @PastOrPresent
     private LocalDate birthday;
-
-    @NotNull
-    private Set<Long> friendshipIds = new HashSet<>();
 }

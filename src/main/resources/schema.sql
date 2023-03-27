@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS friendship(
     status_id BIGINT,
     CONSTRAINT fk_friendship_user_id
         FOREIGN KEY(user_id)
-            REFERENCES users(user_id)
-            ON DELETE CASCADE,
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
     CONSTRAINT fk_friendship_friend_id
         FOREIGN KEY(user_id)
         REFERENCES users(user_id)
