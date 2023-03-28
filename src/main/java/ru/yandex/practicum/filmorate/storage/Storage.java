@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Entity;
 
 import java.util.Collection;
@@ -9,7 +10,7 @@ public interface Storage<T extends Entity> {
     
     T add(T entity);
 
-    T update(T entity);
+    T update(T entity) throws EntityNotFoundException;
 
     Optional<T> getById(long id);
 

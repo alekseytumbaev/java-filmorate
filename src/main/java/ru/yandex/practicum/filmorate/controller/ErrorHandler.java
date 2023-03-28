@@ -36,9 +36,9 @@ public class ErrorHandler {
     public ErrorResponse onUserNotFoundException(final UserNotFoundException e) {
         String message = getErrorMessage(
                 "ErrorResponse.message.userNotFound",
-                new Object[]{e.getUserId()},
+                new Object[]{e.getId()},
                 e,
-                String.format("User with id=%d not found", e.getUserId())
+                String.format("User with id=%d not found", e.getId())
         );
         log.warn(message, e);
         return new ErrorResponse(message);
@@ -49,9 +49,9 @@ public class ErrorHandler {
     public ErrorResponse onFilmNotFoundException(final FilmNotFoundException e) {
         String message = getErrorMessage(
                 "ErrorResponse.message.filmNotFound",
-                new Object[]{e.getFilmId()},
+                new Object[]{e.getId()},
                 e,
-                String.format("Film with id=%d not found", e.getFilmId())
+                String.format("Film with id=%d not found", e.getId())
         );
         log.warn(message, e);
         return new ErrorResponse(message);

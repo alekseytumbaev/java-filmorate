@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.impl;
+package ru.yandex.practicum.filmorate.storage.impl.in_memory;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class InMemoryFilmStorage extends AbstractInMemoryStorage<Film> implements FilmStorage {
     @Override
-    public Film update(Film entity) {
+    public Film update(Film entity) throws FilmNotFoundException {
         long id = entity.getId();
         if (!existsById(id))
             throw new FilmNotFoundException(
