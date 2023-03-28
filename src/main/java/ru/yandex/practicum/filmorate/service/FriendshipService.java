@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.user.Friendship;
 import ru.yandex.practicum.filmorate.model.user.User;
@@ -17,7 +18,7 @@ public class FriendshipService {
     private final FriendshipStorage friendshipStorage;
 
     @Autowired
-    public FriendshipService(FriendshipStorage friendshipStorage) {
+    public FriendshipService(@Qualifier("friendshipDaoStorage") FriendshipStorage friendshipStorage) {
         this.friendshipStorage = friendshipStorage;
     }
 
@@ -37,7 +38,7 @@ public class FriendshipService {
     }
 
     public Collection<User> getFriends(long userId) {
-        return friendshipStorage.findFriendsByUserIdAndFriendshipStatus(userId, CONFIRMED);
+        return friendshipStorage.getFriendsByUserIdAndFriendshipStatus(userId, CONFIRMED);
     }
 
     /**
@@ -45,14 +46,14 @@ public class FriendshipService {
      */
     public Collection<User> getMutualFriends(long firstUserId, long secondUserid) {
         if (firstUserId == secondUserid) return getFriends(firstUserId);
-        return friendshipStorage.findMutualFriends(firstUserId, secondUserid);
+        return friendshipStorage.getMutualFriends(firstUserId, secondUserid);
     }
 
     private boolean friendshipExists(long userId, long friendId) {
         if (userId == friendId) return true;
 
         Optional<Friendship> userFriendship = friendshipStorage.
-                findFriendshipByUserIds(userId, friendId);
+                getFriendshipByUserIds(userId, friendId);
 
         return userFriendship.isPresent();
     }

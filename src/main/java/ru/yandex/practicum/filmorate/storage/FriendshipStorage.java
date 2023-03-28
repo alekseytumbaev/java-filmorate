@@ -7,13 +7,15 @@ import ru.yandex.practicum.filmorate.model.user.User;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface FriendshipStorage extends Storage<Friendship> {
+public interface FriendshipStorage {
 
-    Collection<User> findFriendsByUserIdAndFriendshipStatus(long userId, EFriendshipStatus friendshipStatus);
+    Friendship add(Friendship friendship);
 
-    Collection<User> findMutualFriends(long firstUserId, long secondUserId);
+    Collection<User> getFriendsByUserIdAndFriendshipStatus(long userId, EFriendshipStatus friendshipStatus);
 
-    Optional<Friendship> findFriendshipByUserIds(long userId, long friendId);
+    Collection<User> getMutualFriends(long firstUserId, long secondUserId);
+
+    Optional<Friendship> getFriendshipByUserIds(long userId, long friendId);
 
     void deleteFriendshipByUserIds(long userId, long friendId);
 

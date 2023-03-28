@@ -12,10 +12,15 @@ public class Friendship extends Entity {
     private long userId;
     private long friendId;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     @NotNull
     private FriendshipStatus friendshipStatus;
+
+    public Friendship(long id, long userId, long friendId, FriendshipStatus friendshipStatus) {
+        super(id);
+        this.userId = userId;
+        this.friendId = friendId;
+        this.friendshipStatus = friendshipStatus;
+    }
 
     public Friendship(long userId, long friendId, EFriendshipStatus status) {
         setUserId(userId);

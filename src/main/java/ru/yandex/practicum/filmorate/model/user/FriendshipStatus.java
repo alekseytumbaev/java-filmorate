@@ -13,6 +13,11 @@ public class FriendshipStatus extends Entity {
     @NotNull
     private EFriendshipStatus status;
 
+    public FriendshipStatus(long id, EFriendshipStatus status) {
+        super(id);
+        this.status = status;
+    }
+
     public FriendshipStatus(EFriendshipStatus status) {
         setStatus(status);
     }
