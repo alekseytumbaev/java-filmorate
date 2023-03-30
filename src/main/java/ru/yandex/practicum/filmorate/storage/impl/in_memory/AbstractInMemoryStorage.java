@@ -1,11 +1,12 @@
 package ru.yandex.practicum.filmorate.storage.impl.in_memory;
 
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Entity;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.CreateRetrieveUpdateStorage;
 
 import java.util.*;
 
-public abstract class AbstractInMemoryStorage<T extends Entity> implements Storage<T> {
+public abstract class AbstractInMemoryStorage<T extends Entity> implements CreateRetrieveUpdateStorage<T> {
     private long nextId;
     protected final Map<Long, T> entities = new HashMap<>();
 
@@ -17,6 +18,9 @@ public abstract class AbstractInMemoryStorage<T extends Entity> implements Stora
     }
 
     @Override
+    public abstract T update(T entity) throws EntityNotFoundException;
+
+    @Override
     public Optional<T> getById(long id) {
         return Optional.ofNullable(entities.get(id));
     }
@@ -26,18 +30,6 @@ public abstract class AbstractInMemoryStorage<T extends Entity> implements Stora
         return entities.values();
     }
 
-    @Override
-    public Collection<T> getAllById(Collection<Long> ids) {
-        Collection<T> result = new ArrayList<>(ids.size());
-        for (Long id : ids) {
-            T entity = entities.get(id);
-            if (entity != null)
-                result.add(entity);
-        }
-        return result;
-    }
-
-    @Override
     public boolean existsById(long id) {
         return entities.containsKey(id);
     }
