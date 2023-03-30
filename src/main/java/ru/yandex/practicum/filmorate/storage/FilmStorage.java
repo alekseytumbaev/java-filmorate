@@ -10,6 +10,7 @@ public interface FilmStorage extends CreateRetrieveUpdateStorage<Film> {
     /**
      * @throws ru.yandex.practicum.filmorate.exception.FilmNotFoundException если фильм с таким id не найден
      */
+    @Override
     Film update(Film film) throws FilmNotFoundException;
 
     Collection<Film> getOrderedByLikesAcs(int amount);

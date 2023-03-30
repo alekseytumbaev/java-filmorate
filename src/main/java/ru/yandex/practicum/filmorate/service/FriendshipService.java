@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.user.Friendship;
 import ru.yandex.practicum.filmorate.model.user.User;
@@ -18,7 +17,7 @@ public class FriendshipService {
     private final FriendshipStorage friendshipStorage;
 
     @Autowired
-    public FriendshipService(@Qualifier("friendshipDaoStorage") FriendshipStorage friendshipStorage) {
+    public FriendshipService(FriendshipStorage friendshipStorage) {
         this.friendshipStorage = friendshipStorage;
     }
 

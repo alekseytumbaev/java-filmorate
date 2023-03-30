@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.impl.dao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -19,7 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-@Qualifier("friendshipDaoStorage")
 public class FriendshipDaoStorage implements FriendshipStorage {
 
     private final JdbcTemplate jdbcTemplate;
@@ -40,7 +38,7 @@ public class FriendshipDaoStorage implements FriendshipStorage {
         FriendshipStatus friendshipStatus = getFriendshipStatusByStatus(friendship.getStatus());
         friendship.setFriendshipStatus(friendshipStatus);
 
-        Map<String, Object> rowAsMap = friendshipMapper.databaseFieldsToEntityValues(friendship);
+        Map<String, Object> rowAsMap = friendshipMapper.mapFieldsToValues(friendship);
         long id = simpleJdbcInsert.executeAndReturnKey(rowAsMap).longValue();
 
         friendship.setId(id);

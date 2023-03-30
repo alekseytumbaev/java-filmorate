@@ -1,18 +1,21 @@
 package ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.yandex.practicum.filmorate.model.Entity;
-import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.Mapper;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.util.Collection;
 
-public class GetAll<T extends Entity> extends SqlQuery<T> {
-    public GetAll(JdbcTemplate jdbcTemplate, Mapper<T> mapper, String tableName) {
-        super(jdbcTemplate, mapper, tableName);
+public class GetAll<T> extends SqlQuery {
+
+    private final RowMapper<T> rowMapper;
+
+    public GetAll(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper, String tableName) {
+        super(jdbcTemplate, tableName);
+        this.rowMapper = rowMapper;
     }
 
     public Collection<T> execute() {
         String sql = String.format("SELECT * FROM %s", tableName);
-        return jdbcTemplate.query(sql, mapper);
+        return jdbcTemplate.query(sql, rowMapper);
     }
 }

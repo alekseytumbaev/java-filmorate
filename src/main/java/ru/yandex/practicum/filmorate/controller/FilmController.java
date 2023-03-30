@@ -54,7 +54,7 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public Film getById(@PathVariable long id) {
-        return filmService.getByIdIfExists(id);
+        return filmService.getById(id);
     }
 
     @GetMapping

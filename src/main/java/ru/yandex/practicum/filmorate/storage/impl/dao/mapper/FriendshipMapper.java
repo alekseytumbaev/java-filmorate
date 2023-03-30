@@ -25,7 +25,7 @@ public class FriendshipMapper implements Mapper<Friendship> {
      * Поле id игнорируется.
      */
     @Override
-    public Map<String, Object> databaseFieldsToEntityValues(Friendship entity) {
+    public Map<String, Object> mapFieldsToValues(Friendship entity) {
         Map<String, Object> rowAsMap = new HashMap<>();
 
         rowAsMap.put(USER_ID, entity.getUserId());

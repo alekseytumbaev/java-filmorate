@@ -43,7 +43,7 @@ public class UserMapper implements Mapper<User> {
      * Поле id игнорируется.
      */
     @Override
-    public Map<String, Object> databaseFieldsToEntityValues(User entity) {
+    public Map<String, Object> mapFieldsToValues(User entity) {
         Map<String, Object> rowAsMap = new HashMap<>();
 
         rowAsMap.put(EMAIL, entity.getEmail());
