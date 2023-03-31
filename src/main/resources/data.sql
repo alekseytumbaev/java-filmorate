@@ -1,3 +1,8 @@
+INSERT INTO genres (genre_name)
+VALUES ('Комедия');
+INSERT INTO genres (genre_name)
+VALUES ('Трагедия');
+
 INSERT INTO motion_picture_associations (mpa_name)
 VALUES ('G');
 INSERT INTO motion_picture_associations (mpa_name)
