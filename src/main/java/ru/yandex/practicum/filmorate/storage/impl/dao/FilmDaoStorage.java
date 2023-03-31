@@ -8,8 +8,8 @@ import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.model.film.GenreFilm;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.FilmMapper;
+import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.GenreMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.TableFieldsToEntityValuesMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.ExistsById;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.Insert;
@@ -23,17 +23,17 @@ public class FilmDaoStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final FilmMapper filmMapper;
-    private final GenreStorage genreStorage;
+    private final GenreMapper genreMapper;
 
     private final Insert<Film> filmInsert;
     private final Insert<GenreFilm> genreFilmInsert;
     private final ExistsById<Film> filmExistsById;
 
 
-    public FilmDaoStorage(JdbcTemplate jdbcTemplate, FilmMapper filmMapper, GenreStorage genreStorage) {
+    public FilmDaoStorage(JdbcTemplate jdbcTemplate, FilmMapper filmMapper, GenreMapper genreMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.filmMapper = filmMapper;
-        this.genreStorage = genreStorage;
+        this.genreMapper = genreMapper;
 
         String filmsTableName = "films";
         String filmsIdColumnName = "film_id";
@@ -78,7 +78,7 @@ public class FilmDaoStorage implements FilmStorage {
         if (films.isEmpty()) return Optional.empty();
 
         Film film = films.get(0);
-        Set<Genre> genres = new HashSet<>(genreStorage.getGenresByFilmId(id));
+        Set<Genre> genres = new HashSet<>(getGenresByFilmId(id));
         film.setGenres(genres);
 
         return Optional.of(film);
@@ -102,10 +102,22 @@ public class FilmDaoStorage implements FilmStorage {
 
         for (Film film : films) {
             long filmId = film.getId();
-            Set<Genre> genres = new HashSet<>(genreStorage.getGenresByFilmId(filmId));
+            Set<Genre> genres = new HashSet<>(getGenresByFilmId(filmId));
             film.setGenres(genres);
         }
         return films;
+    }
+
+    private Collection<Genre> getGenresByFilmId(long filmId) {
+        if (!existsById(filmId))
+            throw new FilmNotFoundException(
+                    String.format("Cannot get genres of film with id=%d, because film not found", filmId), filmId);
+        String sql =
+                "SELECT g.* " +
+                        "FROM genres AS g " +
+                        "INNER JOIN genre_films AS gf ON g.genre_id = gf.genre_film_id " +
+                        "AND gf.film_id = ?";
+        return jdbcTemplate.query(sql, genreMapper, filmId);
     }
 
     @Override
@@ -175,7 +187,7 @@ public class FilmDaoStorage implements FilmStorage {
 
         for (Film film : films) {
             long filmId = film.getId();
-            Set<Genre> genres = new HashSet<>(genreStorage.getGenresByFilmId(filmId));
+            Set<Genre> genres = new HashSet<>(getGenresByFilmId(filmId));
             film.setGenres(genres);
         }
         return films;
