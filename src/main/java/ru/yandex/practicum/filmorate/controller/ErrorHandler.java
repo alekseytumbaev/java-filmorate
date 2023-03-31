@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.GenreNotFoundException;
+import ru.yandex.practicum.filmorate.exception.MpaNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.error.ErrorResponse;
 import ru.yandex.practicum.filmorate.model.error.ValidationViolation;
@@ -66,6 +67,18 @@ public class ErrorHandler {
                 new Object[]{e.getId()},
                 e,
                 String.format("Genre with id=%d not found", e.getId()));
+        log.warn(message, e);
+        return new ErrorResponse(message);
+    }
+
+    @ExceptionHandler(MpaNotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public ErrorResponse onMpaNotFoundException(final MpaNotFoundException e) {
+        String message = getErrorMessage(
+                "ErrorResponse.message.mpaNotFound",
+                new Object[]{e.getId()},
+                e,
+                String.format("MPA with id=%d not found", e.getId()));
         log.warn(message, e);
         return new ErrorResponse(message);
     }
