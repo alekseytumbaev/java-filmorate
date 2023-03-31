@@ -20,14 +20,11 @@ public class Film extends Entity {
     @NotBlank
     private String name;
 
-    /**
-     * Motion Picture Association Id
-     */
     @NotNull
-    private Long mpaId;
+    private MotionPictureAssociation mpa;
 
     @NotNull
-    private Set<Long> genreIds;
+    private Set<Genre> genres = new HashSet<>();
 
     /**
      * Максимальная длина описания - 200 символов
@@ -54,4 +51,14 @@ public class Film extends Entity {
      */
     @NotNull
     private Set<Long> likes = new HashSet<>();
+
+    public Film(long id, String name, MotionPictureAssociation mpa,
+                String description, LocalDate releaseDate, int duration) {
+        super(id);
+        this.name = name;
+        this.mpa = mpa;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
 }

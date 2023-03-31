@@ -5,11 +5,11 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.util.Collection;
 
-public class GetAll<T> extends SqlQuery {
+public class SelectAll<T> extends SqlQuery {
 
     private final RowMapper<T> rowMapper;
 
-    public GetAll(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper, String tableName) {
+    public SelectAll(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper, String tableName) {
         super(jdbcTemplate, tableName);
         this.rowMapper = rowMapper;
     }

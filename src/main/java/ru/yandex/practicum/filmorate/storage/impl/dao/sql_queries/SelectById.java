@@ -7,12 +7,12 @@ import ru.yandex.practicum.filmorate.model.Entity;
 import java.util.List;
 import java.util.Optional;
 
-public class GetById<T extends Entity> extends SqlQuery {
+public class SelectById<T extends Entity> extends SqlQuery {
 
     protected final String idColumnName;
     private final RowMapper<T> rowMapper;
 
-    public GetById(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper, String tableName, String idColumnName) {
+    public SelectById(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper, String tableName, String idColumnName) {
         super(jdbcTemplate, tableName);
         this.idColumnName = idColumnName;
         this.rowMapper = rowMapper;

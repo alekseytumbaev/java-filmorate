@@ -11,4 +11,9 @@ public class MotionPictureAssociation extends Entity {
 
     @NotBlank
     private EMotionPictureAssociation name;
+
+    public MotionPictureAssociation(long id, EMotionPictureAssociation name) {
+        super(id);
+        this.name = name;
+    }
 }

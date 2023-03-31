@@ -7,8 +7,8 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.UserMapper;
-import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.GetAll;
-import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.GetById;
+import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.SelectAll;
+import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.SelectById;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.Insert;
 
 import java.sql.Date;
@@ -23,8 +23,8 @@ public class UserDaoStorage  implements UserStorage {
     private final UserMapper userMapper;
 
     private final Insert<User> userInsert;
-    private final GetById<User> userGetById;
-    private final GetAll<User> userGetAll;
+    private final SelectById<User> userSelectById;
+    private final SelectAll<User> userSelectAll;
 
     public UserDaoStorage(JdbcTemplate jdbcTemplate, UserMapper userMapper) {
         this.jdbcTemplate = jdbcTemplate;
@@ -33,8 +33,8 @@ public class UserDaoStorage  implements UserStorage {
         String tableName = "users";
         String idColumnName = "user_id";
         this.userInsert = new Insert<>(jdbcTemplate, userMapper, tableName, idColumnName);
-        this.userGetById = new GetById<>(jdbcTemplate, userMapper, tableName, idColumnName);
-        this.userGetAll = new GetAll<>(jdbcTemplate, userMapper, tableName);
+        this.userSelectById = new SelectById<>(jdbcTemplate, userMapper, tableName, idColumnName);
+        this.userSelectAll = new SelectAll<>(jdbcTemplate, userMapper, tableName);
 
     }
 
@@ -45,24 +45,31 @@ public class UserDaoStorage  implements UserStorage {
 
     @Override
     public Optional<User> getById(long id) {
-        return userGetById.execute(id);
+        return userSelectById.execute(id);
     }
 
     @Override
     public Collection<User> getAll() {
-        return userGetAll.execute();
+        return userSelectAll.execute();
     }
 
     @Override
     public User update(User user) throws UserNotFoundException {
-        String sql = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE user_id = " + user.getId();
+        String sql =
+                "UPDATE users " +
+                "SET email = ?, " +
+                    "login = ?, " +
+                    "name = ?, " +
+                    "birthday = ? " +
+                "WHERE user_id = ?";
 
         int numberOfUpdatedRows = jdbcTemplate.update(
                 sql,
                 user.getEmail(),
                 user.getLogin(),
                 user.getName(),
-                Date.valueOf(user.getBirthday()));
+                Date.valueOf(user.getBirthday()),
+                user.getId());
 
         if (numberOfUpdatedRows < 1)
             throw new UserNotFoundException(
