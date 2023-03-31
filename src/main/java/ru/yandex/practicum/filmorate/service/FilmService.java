@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.LikeStorage;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -15,11 +16,13 @@ import java.util.Optional;
 public class FilmService {
     private static final int DEFAULT_MOST_POPULAR_FILMS_AMOUNT = 10;
     private final FilmStorage filmStorage;
+    private final LikeStorage likeStorage;
     private final UserService userService;
 
     @Autowired
-    public FilmService(@Qualifier("filmDaoStorage") FilmStorage filmStorage, UserService userService) {
+    public FilmService(@Qualifier("filmDaoStorage") FilmStorage filmStorage, LikeStorage likeStorage, UserService userService) {
         this.filmStorage = filmStorage;
+        this.likeStorage = likeStorage;
         this.userService = userService;
 }
 
@@ -33,16 +36,14 @@ public class FilmService {
         Film film = getById(filmId);
         User user = userService.getById(userId);
 
-        film.getLikes().add(user.getId());
-        update(film);
+        likeStorage.addLike(userId, filmId);
     }
 
     public void removeLike(long filmId, long userId) {
         Film film = getById(filmId);
         User user = userService.getById(userId);
 
-        film.getLikes().remove(user.getId());
-        update(film);
+        likeStorage.removeLike(userId, filmId);
     }
 
     public Film add(Film film) {
