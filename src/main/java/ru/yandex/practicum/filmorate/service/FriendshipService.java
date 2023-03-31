@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.user.Friendship;
 import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.storage.FriendshipStorage;
@@ -14,10 +15,12 @@ import static ru.yandex.practicum.filmorate.model.user.EFriendshipStatus.CONFIRM
 @Service
 public class FriendshipService {
 
+    private final UserService userService;
     private final FriendshipStorage friendshipStorage;
 
     @Autowired
-    public FriendshipService(FriendshipStorage friendshipStorage) {
+    public FriendshipService(UserService userService, FriendshipStorage friendshipStorage) {
+        this.userService = userService;
         this.friendshipStorage = friendshipStorage;
     }
 
@@ -26,6 +29,15 @@ public class FriendshipService {
     }
 
     public void addFriend(long userId, long friendId) {
+        if (!userService.existsById(userId))
+            throw new UserNotFoundException(
+                    String.format("Cannot add friend with id=%d to user with id=%d, because user not found", friendId, userId),
+                    userId);
+        if (!userService.existsById(friendId))
+            throw new UserNotFoundException(
+                    String.format("Cannot add friend with id=%d to user with id=%d, because friend not found", friendId, userId),
+                    friendId);
+
         if (friendshipExists(userId, friendId)) return;
 
         // В тестах, несмотря на тз, предполагается, что подтверждать дружбу не надо
@@ -44,6 +56,15 @@ public class FriendshipService {
      * Если firstUserId = secondUserId - возвращается просто список друзей этого пользователя
      */
     public Collection<User> getMutualFriends(long firstUserId, long secondUserid) {
+        if (!userService.existsById(firstUserId))
+            throw new UserNotFoundException(
+                    String.format("Cannot get mutual friends, because user with id=%d not found", firstUserId),
+                    firstUserId);
+        if (!userService.existsById(secondUserid))
+            throw new UserNotFoundException(
+                    String.format("Cannot get mutual friends, because user with id=%d not found", secondUserid),
+                    secondUserid);
+
         if (firstUserId == secondUserid) return getFriends(firstUserId);
         return friendshipStorage.getMutualFriends(firstUserId, secondUserid);
     }

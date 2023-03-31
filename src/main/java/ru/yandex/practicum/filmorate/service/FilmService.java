@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.film.Film;
-import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.LikeStorage;
 
@@ -33,15 +33,23 @@ public class FilmService {
     }
 
     public void like(long filmId, long userId) {
-        Film film = getById(filmId);
-        User user = userService.getById(userId);
+        if (!filmStorage.existsById(filmId))
+            throw new FilmNotFoundException(
+                    String.format("Cannot like film with id=%d, because film not found", filmId), filmId);
+        if (!userService.existsById(userId))
+            throw new UserNotFoundException(
+                    String.format("User with id=%d cannot like film, because user not found", userId), userId);
 
         likeStorage.addLike(userId, filmId);
     }
 
     public void removeLike(long filmId, long userId) {
-        Film film = getById(filmId);
-        User user = userService.getById(userId);
+        if (!filmStorage.existsById(filmId))
+            throw new FilmNotFoundException(
+                    String.format("Cannot remove lke from film with id=%d, because film not found", filmId), filmId);
+        if (!userService.existsById(userId))
+            throw new UserNotFoundException(
+                    String.format("User with id=%d cannot remove like from film, because user not found", userId), userId);
 
         likeStorage.removeLike(userId, filmId);
     }

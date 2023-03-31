@@ -14,4 +14,6 @@ public interface FilmStorage extends CreateRetrieveUpdateStorage<Film> {
     Film update(Film film) throws FilmNotFoundException;
 
     Collection<Film> getOrderedByLikesDesc(int amount);
+
+    boolean existsById(long id);
 }

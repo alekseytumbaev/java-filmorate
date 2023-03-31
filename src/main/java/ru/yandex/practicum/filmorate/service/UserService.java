@@ -48,4 +48,8 @@ public class UserService {
 
         return userOpt.get();
     }
+
+    public boolean existsById(long id) {
+        return userStorage.existsById(id);
+    }
 }

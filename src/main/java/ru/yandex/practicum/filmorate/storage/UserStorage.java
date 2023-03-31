@@ -9,4 +9,6 @@ public interface UserStorage extends CreateRetrieveUpdateStorage<User> {
      */
     @Override
     User update(User user) throws UserNotFoundException;
+
+    boolean existsById(long id);
 }

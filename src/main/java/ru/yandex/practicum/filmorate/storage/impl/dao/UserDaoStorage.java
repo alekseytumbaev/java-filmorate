@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.UserMapper;
+import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.ExistsById;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.SelectAll;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.SelectById;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.Insert;
@@ -25,6 +26,7 @@ public class UserDaoStorage  implements UserStorage {
     private final Insert<User> userInsert;
     private final SelectById<User> userSelectById;
     private final SelectAll<User> userSelectAll;
+    private final ExistsById<User> userExistsById;
 
     public UserDaoStorage(JdbcTemplate jdbcTemplate, UserMapper userMapper) {
         this.jdbcTemplate = jdbcTemplate;
@@ -35,6 +37,7 @@ public class UserDaoStorage  implements UserStorage {
         this.userInsert = new Insert<>(jdbcTemplate, userMapper, tableName, idColumnName);
         this.userSelectById = new SelectById<>(jdbcTemplate, userMapper, tableName, idColumnName);
         this.userSelectAll = new SelectAll<>(jdbcTemplate, userMapper, tableName);
+        this.userExistsById = new ExistsById<>(jdbcTemplate, tableName, idColumnName);
 
     }
 
@@ -76,5 +79,10 @@ public class UserDaoStorage  implements UserStorage {
                     String.format("User with id=%d not updated, because not found", user.getId()), user.getId());
 
         return user;
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return userExistsById.execute(id);
     }
 }

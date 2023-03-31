@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.TableFieldsToEntityValuesMapper;
+import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.ExistsById;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.Insert;
 
 import java.sql.Date;
@@ -26,6 +27,7 @@ public class FilmDaoStorage implements FilmStorage {
 
     private final Insert<Film> filmInsert;
     private final Insert<GenreFilm> genreFilmInsert;
+    private final ExistsById<Film> filmExistsById;
 
 
     public FilmDaoStorage(JdbcTemplate jdbcTemplate, FilmMapper filmMapper, GenreStorage genreStorage) {
@@ -37,6 +39,7 @@ public class FilmDaoStorage implements FilmStorage {
         String filmsIdColumnName = "film_id";
         filmInsert = new Insert<>(jdbcTemplate, filmMapper,
                 filmsTableName, filmsIdColumnName);
+        filmExistsById = new ExistsById<>(jdbcTemplate, filmsTableName, filmsIdColumnName);
 
         TableFieldsToEntityValuesMapper<GenreFilm> genreFilmTfevMapper = genreFilm -> {
             Map<String, Object> rowAsMap = new HashMap<>();
@@ -176,5 +179,10 @@ public class FilmDaoStorage implements FilmStorage {
             film.setGenres(genres);
         }
         return films;
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return filmExistsById.execute(id);
     }
 }
