@@ -29,7 +29,7 @@ public class FilmService {
     public Collection<Film> getTopMostPopular(int amount) {
         amount = amount < 1 ? DEFAULT_MOST_POPULAR_FILMS_AMOUNT : amount;
 
-        return filmStorage.getOrderedByLikesDesc(amount);
+        return filmStorage.getOrderedByLikesAcs(amount);
     }
 
     public void like(long filmId, long userId) {

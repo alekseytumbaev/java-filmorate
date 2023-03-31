@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.impl.dao.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.model.film.EMotionPictureAssociation;
 import ru.yandex.practicum.filmorate.model.film.MotionPictureAssociation;
 
 import java.sql.ResultSet;
@@ -18,7 +17,7 @@ public class MpaMapper implements Mapper<MotionPictureAssociation> {
     public MotionPictureAssociation mapRow(ResultSet rs, int rowNum) throws SQLException {
         long id = rs.getLong(MPA_ID);
         String mpaName = rs.getString(MPA_NAME);
-        return new MotionPictureAssociation(id, EMotionPictureAssociation.valueOf(mpaName));
+        return new MotionPictureAssociation(id, mpaName);
     }
 
     @Override

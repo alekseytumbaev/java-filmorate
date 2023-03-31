@@ -10,9 +10,12 @@ import javax.validation.constraints.NotBlank;
 public class MotionPictureAssociation extends Entity {
 
     @NotBlank
-    private EMotionPictureAssociation name;
+    private String  name;
 
-    public MotionPictureAssociation(long id, EMotionPictureAssociation name) {
+    public MotionPictureAssociation() {
+    }
+
+    public MotionPictureAssociation(long id, String name) {
         super(id);
         this.name = name;
     }

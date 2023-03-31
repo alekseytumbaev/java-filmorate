@@ -18,6 +18,9 @@ public class FriendshipStatus extends Entity {
         this.status = status;
     }
 
+    public FriendshipStatus() {
+    }
+
     public FriendshipStatus(EFriendshipStatus status) {
         setStatus(status);
     }

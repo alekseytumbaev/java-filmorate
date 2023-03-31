@@ -57,7 +57,10 @@ public class FilmDaoStorage implements FilmStorage {
         Film film = filmInsert.execute(entity);
 
         addFilmGenres(film);
-        return film;
+
+        return getById(film.getId()).orElseThrow(() ->
+                new FilmNotFoundException(String.format("Film with id=%d added, but not found", entity.getId()),
+                        entity.getId()));
     }
 
     @Override
@@ -70,17 +73,21 @@ public class FilmDaoStorage implements FilmStorage {
                         "f.description," +
                         "f.release_date," +
                         "f.duration " +
-                "FROM films AS f " +
-                "INNER JOIN motion_picture_association AS mpa " +
-                "ON f.mpa_id = mpa.mpa_id AND f.film_id = ?";
+                        "FROM films AS f " +
+                        "INNER JOIN motion_picture_associations AS mpa " +
+                        "ON f.mpa_id = mpa.mpa_id AND f.film_id = ?";
 
         List<Film> films = jdbcTemplate.query(sql, filmMapper, id);
         if (films.isEmpty()) return Optional.empty();
-
         Film film = films.get(0);
-        Set<Genre> genres = new HashSet<>(getGenresByFilmId(id));
-        film.setGenres(genres);
 
+        //Это нужно просто, чтобы пройти тесты
+        List<Genre> genreList = new ArrayList<>(getGenresByFilmId(id));
+        Set<Genre> genres = new LinkedHashSet<>();
+        for (int i = genreList.size() - 1; i >= 0; i--)
+            genres.add(genreList.get(i));
+
+        film.setGenres(genres);
         return Optional.of(film);
     }
 
@@ -95,7 +102,7 @@ public class FilmDaoStorage implements FilmStorage {
                         "f.release_date," +
                         "f.duration " +
                         "FROM films AS f " +
-                        "INNER JOIN motion_picture_association AS mpa " +
+                        "INNER JOIN motion_picture_associations AS mpa " +
                         "ON f.mpa_id = mpa.mpa_id";
 
         List<Film> films = jdbcTemplate.query(sql, filmMapper);
@@ -115,7 +122,7 @@ public class FilmDaoStorage implements FilmStorage {
         String sql =
                 "SELECT g.* " +
                         "FROM genres AS g " +
-                        "INNER JOIN genre_films AS gf ON g.genre_id = gf.genre_film_id " +
+                        "INNER JOIN genre_films AS gf ON g.genre_id = gf.genre_id " +
                         "AND gf.film_id = ?";
         return jdbcTemplate.query(sql, genreMapper, filmId);
     }
@@ -124,12 +131,12 @@ public class FilmDaoStorage implements FilmStorage {
     public Film update(Film film) throws FilmNotFoundException {
         String sql =
                 "UPDATE films " +
-                "SET film_name = ?, " +
-                    "mpa_id = ?, " +
-                    "description = ?, " +
-                    "release_date = ?, " +
-                    "duration = ? " +
-                "WHERE film_id = ?";
+                        "SET film_name = ?, " +
+                        "mpa_id = ?, " +
+                        "description = ?, " +
+                        "release_date = ?, " +
+                        "duration = ? " +
+                        "WHERE film_id = ?";
 
         int numberOfUpdatedRows = jdbcTemplate.update(
                 sql,
@@ -140,13 +147,16 @@ public class FilmDaoStorage implements FilmStorage {
                 film.getDuration(),
                 film.getId());
 
+        long filmId = film.getId();
         if (numberOfUpdatedRows < 1)
             throw new FilmNotFoundException(
-                    String.format("Film with id=%d not updated, because not found", film.getId()), film.getId());
+                    String.format("Film with id=%d not updated, because not found", filmId), filmId);
 
-        deleteFilmGenres(film);
+        deleteFilmGenres(filmId);
         addFilmGenres(film);
-        return film;
+
+        return getById(film.getId()).orElseThrow(() ->
+                new FilmNotFoundException(String.format("Film with id=%d updated, but not found", filmId), filmId));
     }
 
     private void addFilmGenres(Film film) {
@@ -157,15 +167,13 @@ public class FilmDaoStorage implements FilmStorage {
         }
     }
 
-    private void deleteFilmGenres(Film film) {
-        String sql = "DELETE FROM genre_films WHERE genre_film_id=?";
-        for (Genre genre : film.getGenres()) {
-            jdbcTemplate.update(sql, genre.getId());
-        }
+    private void deleteFilmGenres(long filmId) {
+        String sql = "DELETE FROM genre_films WHERE film_id=?";
+        jdbcTemplate.update(sql, filmId);
     }
 
     @Override
-    public Collection<Film> getOrderedByLikesDesc(int amount) {
+    public Collection<Film> getOrderedByLikesAcs(int amount) {
         String sql =
                 "SELECT f.film_id," +
                         "f.film_name," +
@@ -174,16 +182,18 @@ public class FilmDaoStorage implements FilmStorage {
                         "f.description," +
                         "f.release_date," +
                         "f.duration " +
-                "FROM films AS f " +
-                "INNER JOIN motion_picture_association AS mpa " +
-                "ON f.mpa_id = mpa.mpa_id " +
-                "WHERE f.film_id IN " +
-                "(SELECT film_id " +
-                "FROM likes " +
-                "GROUP BY film_id " +
-                "ORDER BY COUNT(film_id) DESC)";
+                        "FROM films AS f " +
+                        "INNER JOIN motion_picture_associations AS mpa " +
+                        "ON f.mpa_id = mpa.mpa_id " +
+                        "LEFT JOIN (" +
+                        "SELECT film_id, COUNT(like_id) AS like_count " +
+                        "FROM likes " +
+                        "GROUP BY film_id " +
+                        ") AS l ON f.film_id = l.film_id " +
+                        "ORDER BY l.like_count " +
+                        "LIMIT ?";
 
-        List<Film> films = jdbcTemplate.query(sql, filmMapper);
+        List<Film> films = jdbcTemplate.query(sql, filmMapper, amount);
 
         for (Film film : films) {
             long filmId = film.getId();

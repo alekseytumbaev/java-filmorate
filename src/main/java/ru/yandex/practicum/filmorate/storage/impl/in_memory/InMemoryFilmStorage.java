@@ -21,7 +21,7 @@ public class InMemoryFilmStorage extends AbstractInMemoryStorage<Film> implement
         return entity;
     }
 
-    public Collection<Film> getOrderedByLikesDesc(int amount) {
+    public Collection<Film> getOrderedByLikesAcs(int amount) {
         Comparator<Film> comparator = (f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size());
         return entities.values().stream().sorted(comparator).limit(amount)
                 .collect(Collectors.toList());

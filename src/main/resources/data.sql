@@ -1,18 +1,26 @@
 INSERT INTO genres (genre_name)
 VALUES ('Комедия');
 INSERT INTO genres (genre_name)
-VALUES ('Трагедия');
+VALUES ('Драма');
+INSERT INTO genres (genre_name)
+VALUES ('Мультфильм');
+INSERT INTO genres (genre_name)
+VALUES ('Триллер');
+INSERT INTO genres (genre_name)
+VALUES ('Документальный');
+INSERT INTO genres (genre_name)
+VALUES ('Боевик');
 
 INSERT INTO motion_picture_associations (mpa_name)
 VALUES ('G');
 INSERT INTO motion_picture_associations (mpa_name)
 VALUES ('PG');
 INSERT INTO motion_picture_associations (mpa_name)
-VALUES ('PG13');
+VALUES ('PG-13');
 INSERT INTO motion_picture_associations (mpa_name)
 VALUES ('R');
 INSERT INTO motion_picture_associations (mpa_name)
-VALUES ('NC17');
+VALUES ('NC-17');
 
 INSERT INTO friendship_statuses (status)
 VALUES ('REQUESTED');

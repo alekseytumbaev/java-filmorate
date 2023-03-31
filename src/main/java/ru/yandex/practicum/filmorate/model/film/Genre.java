@@ -12,6 +12,9 @@ public class Genre extends Entity {
     @NotBlank
     private String name;
 
+    public Genre() {
+    }
+
     public Genre(long id, String name) {
         super(id);
         this.name = name;

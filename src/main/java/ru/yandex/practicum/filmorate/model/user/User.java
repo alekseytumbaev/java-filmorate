@@ -30,6 +30,9 @@ public class User extends Entity {
     @PastOrPresent
     private LocalDate birthday;
 
+    public User() {
+    }
+
     public User(long id, String email, String login, String name, LocalDate birthday) {
         super(id);
         this.email = email;

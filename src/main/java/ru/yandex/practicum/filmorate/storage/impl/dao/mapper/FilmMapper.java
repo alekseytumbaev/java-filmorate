@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.impl.dao.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.model.film.EMotionPictureAssociation;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.MotionPictureAssociation;
 
@@ -46,7 +45,7 @@ public class FilmMapper implements Mapper<Film> {
         LocalDate releaseDate = rs.getDate(RELEASE_DATE).toLocalDate();
         int duration = rs.getInt(DURATION);
 
-        MotionPictureAssociation mpa = new MotionPictureAssociation(mpaId, EMotionPictureAssociation.valueOf(mpaName));
+        MotionPictureAssociation mpa = new MotionPictureAssociation(mpaId, mpaName);
         return new Film(id, filmName, mpa, description, releaseDate, duration);
     }
 }

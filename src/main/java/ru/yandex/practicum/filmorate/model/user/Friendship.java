@@ -15,6 +15,9 @@ public class Friendship extends Entity {
     @NotNull
     private FriendshipStatus friendshipStatus;
 
+    public Friendship() {
+    }
+
     public Friendship(long id, long userId, long friendId, FriendshipStatus friendshipStatus) {
         super(id);
         this.userId = userId;

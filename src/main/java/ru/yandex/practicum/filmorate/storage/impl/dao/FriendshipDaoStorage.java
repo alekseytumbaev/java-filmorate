@@ -46,7 +46,7 @@ public class FriendshipDaoStorage implements FriendshipStorage {
     }
 
     private FriendshipStatus getFriendshipStatusByStatus(EFriendshipStatus status) {
-        String sql = "SELECT * FROM friendship_status WHERE status = ?";
+        String sql = "SELECT * FROM friendship_statuses WHERE status = ?";
 
         RowMapper<FriendshipStatus> statusRowMapper = (rs, rn) -> {
             long id = rs.getLong("friendship_status_id");
@@ -54,7 +54,7 @@ public class FriendshipDaoStorage implements FriendshipStorage {
             return new FriendshipStatus(id, EFriendshipStatus.valueOf(dbStatus));
         };
 
-        return jdbcTemplate.query(sql, statusRowMapper, status).get(0);
+        return jdbcTemplate.query(sql, statusRowMapper, status.toString()).get(0);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class FriendshipDaoStorage implements FriendshipStorage {
         String sql =
                 "SELECT f.friendship_id, f.user_id, f.friend_id, fs.friendship_status_id, fs.status " +
                 "FROM friendship AS f " +
-                "INNER JOIN friendship_statuses AS fs ON f.status_id = fs.freindship_status_id " +
+                "INNER JOIN friendship_statuses AS fs ON f.status_id = fs.friendship_status_id " +
                 "WHERE user_id = ? AND friend_id = ?";
         List<Friendship> friendship = jdbcTemplate.query(sql, friendshipMapper, userId, friendId);
         return friendship.isEmpty() ? Optional.empty() : Optional.of(friendship.get(0));

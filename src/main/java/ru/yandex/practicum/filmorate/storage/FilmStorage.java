@@ -13,7 +13,7 @@ public interface FilmStorage extends CreateRetrieveUpdateStorage<Film> {
     @Override
     Film update(Film film) throws FilmNotFoundException;
 
-    Collection<Film> getOrderedByLikesDesc(int amount);
+    Collection<Film> getOrderedByLikesAcs(int amount);
 
     boolean existsById(long id);
 }

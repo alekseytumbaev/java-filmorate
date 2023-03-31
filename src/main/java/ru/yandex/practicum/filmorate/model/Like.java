@@ -16,6 +16,9 @@ public class Like extends Entity {
       this.userId = userId;
    }
 
+   public Like() {
+   }
+
    public Like(long userId, long filmId) {
       this.filmId = filmId;
       this.userId = userId;

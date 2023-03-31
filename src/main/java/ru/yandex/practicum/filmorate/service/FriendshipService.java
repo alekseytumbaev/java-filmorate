@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import static ru.yandex.practicum.filmorate.model.user.EFriendshipStatus.CONFIRMED;
+import static ru.yandex.practicum.filmorate.model.user.EFriendshipStatus.RECIEVED;
 
 @Service
 public class FriendshipService {
@@ -40,9 +41,8 @@ public class FriendshipService {
 
         if (friendshipExists(userId, friendId)) return;
 
-        // В тестах, несмотря на тз, предполагается, что подтверждать дружбу не надо
         Friendship firstUserFriendship = new Friendship(userId, friendId, CONFIRMED);
-        Friendship secondUserFriendship = new Friendship(friendId, userId, CONFIRMED);
+        Friendship secondUserFriendship = new Friendship(friendId, userId, RECIEVED);
 
         friendshipStorage.add(firstUserFriendship);
         friendshipStorage.add(secondUserFriendship);
