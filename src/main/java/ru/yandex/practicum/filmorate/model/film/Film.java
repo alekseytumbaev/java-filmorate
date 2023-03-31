@@ -56,6 +56,15 @@ public class Film extends Entity {
     public Film() {
     }
 
+    public Film(String name, MotionPictureAssociation mpa,
+                String description, LocalDate releaseDate, int duration) {
+        this.name = name;
+        this.mpa = mpa;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
+
     public Film(long id, String name, MotionPictureAssociation mpa,
                 String description, LocalDate releaseDate, int duration) {
         super(id);

@@ -15,6 +15,10 @@ public class MotionPictureAssociation extends Entity {
     public MotionPictureAssociation() {
     }
 
+    public MotionPictureAssociation(long id) {
+        super(id);
+    }
+
     public MotionPictureAssociation(long id, String name) {
         super(id);
         this.name = name;
