@@ -38,17 +38,17 @@ public class FriendshipMapper implements Mapper<Friendship> {
     @Override
     public Friendship mapRow(ResultSet rs, int rowNum) throws SQLException {
         long id = rs.getLong(FRIENDSHIP_ID);
-        long user_id = rs.getLong(USER_ID);
-        long friend_id = rs.getLong(FRIEND_ID);
+        long userId = rs.getLong(USER_ID);
+        long friendId = rs.getLong(FRIEND_ID);
 
-        long friendship_status_id = rs.getLong("friendship_status_id");
+        long friendshipStatusId = rs.getLong("friendship_status_id");
         String status = rs.getString("status");
 
         return new Friendship(
                 id,
-                user_id,
-                friend_id,
-                new FriendshipStatus(friendship_status_id, EFriendshipStatus.valueOf(status))
+                userId,
+                friendId,
+                new FriendshipStatus(friendshipStatusId, EFriendshipStatus.valueOf(status))
         );
     }
 }
