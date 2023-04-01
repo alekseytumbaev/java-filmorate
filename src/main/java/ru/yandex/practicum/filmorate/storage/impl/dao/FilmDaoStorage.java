@@ -44,8 +44,8 @@ public class FilmDaoStorage implements FilmStorage {
         TableFieldsToEntityValuesMapper<GenreFilm> genreFilmTfevMapper = genreFilm -> {
             Map<String, Object> rowAsMap = new HashMap<>();
             rowAsMap.put("genre_film_id", genreFilm.getId());
-            rowAsMap.put("film_id", genreFilm.getFilm_id());
-            rowAsMap.put("genre_id", genreFilm.getGenre_id());
+            rowAsMap.put("film_id", genreFilm.getFilmId());
+            rowAsMap.put("genre_id", genreFilm.getGenreId());
             return rowAsMap;
         };
         genreFilmInsert = new Insert<>(jdbcTemplate, genreFilmTfevMapper,

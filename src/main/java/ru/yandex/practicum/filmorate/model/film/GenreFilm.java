@@ -11,14 +11,14 @@ import ru.yandex.practicum.filmorate.model.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class GenreFilm extends Entity {
 
-    private long film_id;
-    private long genre_id;
+    private long filmId;
+    private long genreId;
 
     public GenreFilm() {
     }
 
-    public GenreFilm(long film_id, long genre_id) {
-        this.film_id = film_id;
-        this.genre_id = genre_id;
+    public GenreFilm(long filmId, long genreId) {
+        this.filmId = filmId;
+        this.genreId = genreId;
     }
 }
