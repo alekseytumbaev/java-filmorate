@@ -24,7 +24,7 @@ import static ru.yandex.practicum.filmorate.model.user.EFriendshipStatus.RECIEVE
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmorateApplicationTests {
-    
+
     private final FilmDaoStorage filmStorage;
     private final FriendshipDaoStorage friendshipStorage;
     private final GenreDaoStorage genreStorage;
@@ -43,32 +43,31 @@ class FilmorateApplicationTests {
 
         assertEquals("Созданный и добавленный фильм не одинаковы", film, addedFilm);
         assertTrue("Фильм не создан", filmStorage.existsById(filmId));
-        
+
         Optional<Film> retrievedFilmOpt = filmStorage.getById(filmId);
         assertTrue("Не удается получить фильм", retrievedFilmOpt.isPresent());
-        
+
         film.setMpa(new MotionPictureAssociation(2, "PG"));
         Film updatedFilm = filmStorage.update(film);
         assertEquals("Фильм не обновлен", updatedFilm.getMpa().getId(), 2L);
-        
-        
-        
+
+
         LocalDate birthday = LocalDate.of(2002, 7, 31);
         User user = userStorage.add(new User("email@gmail.com", "login", "Name", birthday));
         long userId = user.getId();
         User user1 = userStorage.add(new User("email@gmail.com", "login", "Name", birthday));
         long userId1 = user1.getId();
-        
+
         likeStorage.addLike(userId, filmId);
         likeStorage.addLike(userId1, filmId);
         Film film1 = new Film("Film name 2", new MotionPictureAssociation(3, "PG-13"),
-                "Film descr 2", now, 80);       
+                "Film descr 2", now, 80);
         film1.setId(filmStorage.add(film1).getId());
 
         List<Film> mostPopularFilms = new ArrayList<>(filmStorage.getOrderedByLikesAcs(2));
         assertEquals("Фильмы неправильно отсортированы по популярности", mostPopularFilms.get(0), film);
-        
-        
+
+
         likeStorage.removeLike(userId, filmId);
         likeStorage.removeLike(userId1, filmId);
         likeStorage.addLike(userId, film1.getId());
@@ -77,8 +76,8 @@ class FilmorateApplicationTests {
         List<Film> mostPopularFilms1 = new ArrayList<>(filmStorage.getOrderedByLikesAcs(2));
         assertEquals("Фильмы неправильно отсортированы по популярности", mostPopularFilms1.get(1), film1);
     }
-    
-    
+
+
     @Test
     public void userAndFriendshipStorage() {
         LocalDate birthday = LocalDate.of(2002, 7, 31);
@@ -86,7 +85,7 @@ class FilmorateApplicationTests {
         User addedUser = userStorage.add(user);
         long userId = addedUser.getId();
         user.setId(userId);
-        
+
         assertEquals("Созданный и добавленный пользователь не одинаковы", user, addedUser);
         assertTrue("Пользователь не создан", userStorage.existsById(userId));
 
@@ -97,7 +96,7 @@ class FilmorateApplicationTests {
         User updatedUser = userStorage.update(user);
         assertEquals("Пользователь не обновлен", updatedUser.getLogin(), "updated_login");
 
-        
+
         User friend = userStorage.add(new User("second@gmail.com", "login2", "User 2", birthday));
         long friendId = friend.getId();
         friendshipStorage.add(new Friendship(userId, friendId, CONFIRMED));
