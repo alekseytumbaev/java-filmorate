@@ -1,5 +1,4 @@
 # java-filmorate
-## Рекомендации с p2p проверки расположены в файле [recommendation.txt](https://github.com/alekseytumbaev/java-filmorate/blob/main/recommendation.txt)
 ## База данных
 ### Cхема
 - films
