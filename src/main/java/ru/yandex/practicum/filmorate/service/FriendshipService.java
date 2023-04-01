@@ -72,8 +72,8 @@ public class FriendshipService {
     private boolean friendshipExists(long userId, long friendId) {
         if (userId == friendId) return true;
 
-        Optional<Friendship> userFriendship = friendshipStorage.
-                getFriendshipByUserIds(userId, friendId);
+        Optional<Friendship> userFriendship = friendshipStorage
+                .getFriendshipByUserIds(userId, friendId);
 
         return userFriendship.isPresent();
     }
