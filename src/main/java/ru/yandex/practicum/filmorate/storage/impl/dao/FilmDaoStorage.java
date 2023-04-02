@@ -25,18 +25,16 @@ public class FilmDaoStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     private final FilmMapper filmMapper;
     private final FilmListRowMapper filmListRowMapper;
-    private final GenreMapper genreMapper;
 
     private final Insert<Film> filmInsert;
     private final Insert<GenreFilm> genreFilmInsert;
     private final ExistsById<Film> filmExistsById;
 
 
-    public FilmDaoStorage(JdbcTemplate jdbcTemplate, FilmMapper filmMapper, FilmListRowMapper filmListRowMapper, GenreMapper genreMapper) {
+    public FilmDaoStorage(JdbcTemplate jdbcTemplate, FilmMapper filmMapper, FilmListRowMapper filmListRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.filmMapper = filmMapper;
         this.filmListRowMapper = filmListRowMapper;
-        this.genreMapper = genreMapper;
 
         String filmsTableName = "films";
         String filmsIdColumnName = "film_id";
