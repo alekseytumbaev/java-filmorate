@@ -2,14 +2,14 @@ package ru.yandex.practicum.filmorate.storage.impl.dao.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.film.Film;
+import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.model.film.MotionPictureAssociation;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class FilmMapper implements Mapper<Film> {
@@ -45,7 +45,16 @@ public class FilmMapper implements Mapper<Film> {
         LocalDate releaseDate = rs.getDate(RELEASE_DATE).toLocalDate();
         int duration = rs.getInt(DURATION);
 
+        Set<Genre> genres = new LinkedHashSet<>();
+         do {
+            long genreId = rs.getLong("genre_id");
+            if (genreId != 0) {
+                String genreName = rs.getString("genre_name");
+                genres.add(new Genre(genreId, genreName));
+            }
+        } while (rs.next() && rs.getLong(FILM_ID) == id);
+
         MotionPictureAssociation mpa = new MotionPictureAssociation(mpaId, mpaName);
-        return new Film(id, filmName, mpa, description, releaseDate, duration);
+        return new Film(id, filmName, mpa, description, releaseDate, duration, genres);
     }
 }

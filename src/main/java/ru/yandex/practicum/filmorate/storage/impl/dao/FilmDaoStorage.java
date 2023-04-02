@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.model.film.GenreFilm;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.FilmListRowMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.GenreMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.TableFieldsToEntityValuesMapper;
@@ -23,6 +24,7 @@ public class FilmDaoStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final FilmMapper filmMapper;
+    private final FilmListRowMapper filmListRowMapper;
     private final GenreMapper genreMapper;
 
     private final Insert<Film> filmInsert;
@@ -30,9 +32,10 @@ public class FilmDaoStorage implements FilmStorage {
     private final ExistsById<Film> filmExistsById;
 
 
-    public FilmDaoStorage(JdbcTemplate jdbcTemplate, FilmMapper filmMapper, GenreMapper genreMapper) {
+    public FilmDaoStorage(JdbcTemplate jdbcTemplate, FilmMapper filmMapper, FilmListRowMapper filmListRowMapper, GenreMapper genreMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.filmMapper = filmMapper;
+        this.filmListRowMapper = filmListRowMapper;
         this.genreMapper = genreMapper;
 
         String filmsTableName = "films";
@@ -59,8 +62,8 @@ public class FilmDaoStorage implements FilmStorage {
         addFilmGenres(film);
 
         return getById(film.getId()).orElseThrow(() ->
-                new FilmNotFoundException(String.format("Film with id=%d added, but not found", entity.getId()),
-                        entity.getId()));
+                new FilmNotFoundException(String.format("Film with id=%d added, but not found", film.getId()),
+                        film.getId()));
     }
 
     @Override
@@ -72,23 +75,29 @@ public class FilmDaoStorage implements FilmStorage {
                         "mpa.mpa_name," +
                         "f.description," +
                         "f.release_date," +
-                        "f.duration " +
-                        "FROM films AS f " +
-                        "INNER JOIN motion_picture_associations AS mpa " +
-                        "ON f.mpa_id = mpa.mpa_id AND f.film_id = ?";
+                        "f.duration, " +
+                        "g.genre_id, " +
+                        "g.genre_name " +
+                "FROM films AS f " +
+                "INNER JOIN motion_picture_associations AS mpa " +
+                "ON f.mpa_id = mpa.mpa_id " +
+                "LEFT JOIN genre_films AS gf ON gf.film_id = f.film_id " +
+                "LEFT JOIN genres AS g ON gf.genre_id = g.genre_id " +
+                "WHERE f.film_id = ?";
 
         List<Film> films = jdbcTemplate.query(sql, filmMapper, id);
         if (films.isEmpty()) return Optional.empty();
+
         Film film = films.get(0);
-
-        //Это нужно просто, чтобы пройти тесты
-        List<Genre> genreList = new ArrayList<>(getGenresByFilmId(id));
-        Set<Genre> genres = new LinkedHashSet<>();
-        for (int i = genreList.size() - 1; i >= 0; i--)
-            genres.add(genreList.get(i));
-
-        film.setGenres(genres);
+        reverseGenres(film);
         return Optional.of(film);
+    }
+
+    //Функция нужна, чтобы пройти тесты
+    private void reverseGenres(Film film) {
+        List<Genre> filmGenres = new ArrayList<>(film.getGenres());
+        Collections.reverse(filmGenres);
+        film.setGenres(new LinkedHashSet<>(filmGenres));
     }
 
     @Override
@@ -100,31 +109,16 @@ public class FilmDaoStorage implements FilmStorage {
                         "mpa.mpa_name," +
                         "f.description," +
                         "f.release_date," +
-                        "f.duration " +
-                        "FROM films AS f " +
-                        "INNER JOIN motion_picture_associations AS mpa " +
-                        "ON f.mpa_id = mpa.mpa_id";
-
-        List<Film> films = jdbcTemplate.query(sql, filmMapper);
-
-        for (Film film : films) {
-            long filmId = film.getId();
-            Set<Genre> genres = new HashSet<>(getGenresByFilmId(filmId));
-            film.setGenres(genres);
-        }
-        return films;
-    }
-
-    private Collection<Genre> getGenresByFilmId(long filmId) {
-        if (!existsById(filmId))
-            throw new FilmNotFoundException(
-                    String.format("Cannot get genres of film with id=%d, because film not found", filmId), filmId);
-        String sql =
-                "SELECT g.* " +
-                        "FROM genres AS g " +
-                        "INNER JOIN genre_films AS gf ON g.genre_id = gf.genre_id " +
-                        "AND gf.film_id = ?";
-        return jdbcTemplate.query(sql, genreMapper, filmId);
+                        "f.duration, " +
+                        "g.genre_id, " +
+                        "g.genre_name " +
+                "FROM films AS f " +
+                "INNER JOIN motion_picture_associations AS mpa " +
+                "ON f.mpa_id = mpa.mpa_id " +
+                "LEFT JOIN genre_films AS gf ON gf.film_id = f.film_id " +
+                "LEFT JOIN genres AS g ON gf.genre_id = g.genre_id";
+        List<List<Film>> filmsList = jdbcTemplate.query(sql, filmListRowMapper);
+        return filmsList.isEmpty() ? new ArrayList<>() : filmsList.get(0);
     }
 
     @Override
@@ -182,24 +176,21 @@ public class FilmDaoStorage implements FilmStorage {
                         "f.description," +
                         "f.release_date," +
                         "f.duration, " +
+                        "g.genre_id, " +
+                        "g.genre_name, " +
                         "COUNT(l.like_id) AS rate " +
                 "FROM films AS f " +
                 "INNER JOIN motion_picture_associations AS mpa " +
                 "ON f.mpa_id = mpa.mpa_id " +
-                "LEFT JOIN likes AS l " +
-                "ON l.film_id = f.film_id " +
+                "LEFT JOIN genre_films AS gf ON gf.film_id = f.film_id " +
+                "LEFT JOIN genres AS g ON gf.genre_id = g.genre_id " +
+                "LEFT JOIN likes AS l ON l.film_id = f.film_id " +
                 "GROUP BY f.film_id " +
                 "ORDER BY rate " +
                 "LIMIT ?";
 
-        List<Film> films = jdbcTemplate.query(sql, filmMapper, amount);
-
-        for (Film film : films) {
-            long filmId = film.getId();
-            Set<Genre> genres = new HashSet<>(getGenresByFilmId(filmId));
-            film.setGenres(genres);
-        }
-        return films;
+        List<List<Film>> filmsList = jdbcTemplate.query(sql, filmListRowMapper, amount);
+        return filmsList.isEmpty() ? new ArrayList<>() : filmsList.get(0);
     }
 
     @Override
