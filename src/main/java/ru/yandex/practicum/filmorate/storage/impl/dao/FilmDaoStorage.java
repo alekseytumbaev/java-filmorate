@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.film.GenreFilm;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.FilmListRowMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.FilmMapper;
-import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.GenreMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.mapper.TableFieldsToEntityValuesMapper;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.ExistsById;
 import ru.yandex.practicum.filmorate.storage.impl.dao.sql_queries.Insert;
