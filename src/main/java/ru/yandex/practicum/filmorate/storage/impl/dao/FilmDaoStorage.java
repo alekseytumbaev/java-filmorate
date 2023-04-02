@@ -181,17 +181,16 @@ public class FilmDaoStorage implements FilmStorage {
                         "mpa.mpa_name," +
                         "f.description," +
                         "f.release_date," +
-                        "f.duration " +
-                        "FROM films AS f " +
-                        "INNER JOIN motion_picture_associations AS mpa " +
-                        "ON f.mpa_id = mpa.mpa_id " +
-                        "LEFT JOIN (" +
-                        "SELECT film_id, COUNT(like_id) AS like_count " +
-                        "FROM likes " +
-                        "GROUP BY film_id " +
-                        ") AS l ON f.film_id = l.film_id " +
-                        "ORDER BY l.like_count " +
-                        "LIMIT ?";
+                        "f.duration, " +
+                        "COUNT(l.like_id) AS rate " +
+                "FROM films AS f " +
+                "INNER JOIN motion_picture_associations AS mpa " +
+                "ON f.mpa_id = mpa.mpa_id " +
+                "LEFT JOIN likes AS l " +
+                "ON l.film_id = f.film_id " +
+                "GROUP BY f.film_id " +
+                "ORDER BY rate " +
+                "LIMIT ?";
 
         List<Film> films = jdbcTemplate.query(sql, filmMapper, amount);
 
