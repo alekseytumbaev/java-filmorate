@@ -1,5 +1,4 @@
 # java-filmorate
-
 ## База данных
 ### Cхема
 - films
@@ -15,7 +14,8 @@
     - Когда 2 принимает предложение статусы меняются на `confirmed`
       1) `1,2,confirmed`
       2) `2,1,confirmed`
-      ![](https://user-images.githubusercontent.com/106385986/227537441-62690a0c-3b0c-417f-b481-1e6b4e09326d.png)
+
+      ![](src/main/resources/static/filmorate_db.png)
 
 ### Запросы
 #### Получить фильм по id

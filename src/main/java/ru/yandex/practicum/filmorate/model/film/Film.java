@@ -11,6 +11,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -20,14 +21,11 @@ public class Film extends Entity {
     @NotBlank
     private String name;
 
-    /**
-     * Motion Picture Association Id
-     */
-    @NotBlank
-    private Long mpaId;
+    @NotNull
+    private MotionPictureAssociation mpa;
 
     @NotNull
-    private Set<Long> genreIds;
+    private Set<Genre> genres = new LinkedHashSet<>();
 
     /**
      * Максимальная длина описания - 200 символов
@@ -54,4 +52,27 @@ public class Film extends Entity {
      */
     @NotNull
     private Set<Long> likes = new HashSet<>();
+
+    public Film() {
+    }
+
+    public Film(String name, MotionPictureAssociation mpa,
+                String description, LocalDate releaseDate, int duration) {
+        this.name = name;
+        this.mpa = mpa;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
+
+    public Film(long id, String name, MotionPictureAssociation mpa,
+                String description, LocalDate releaseDate, int duration, Set<Genre> genres) {
+        super(id);
+        this.name = name;
+        this.mpa = mpa;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.genres = genres;
+    }
 }
